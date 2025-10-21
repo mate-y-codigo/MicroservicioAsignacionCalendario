@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace MicroservicioAsignacionCalendario.Domain.Entities
 {
-    public class Class1
+    public enum Estado
     {
+        Activo,
+        EnProceso,
+        Finalizado,
     }
 }
