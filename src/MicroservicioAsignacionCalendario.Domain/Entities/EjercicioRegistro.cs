@@ -8,12 +8,14 @@ namespace MicroservicioAsignacionCalendario.Domain.Entities
 {
     public class EjercicioRegistro
     {
-        Guid Id { get; set; }
-        Guid IdSesionRealizada { get; set; }
-        Guid IdEjercicio { get; set; }
-        int Series { get; set; }
-        int Repeticiones { get; set; }
-        decimal Peso { get; set; }
-        bool Completado { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid IdSesionRealizada { get; set; }
+        public Guid IdEjercicio { get; set; }
+        public int Series { get; set; }
+        public int Repeticiones { get; set; }
+        public decimal Peso { get; set; }
+        public bool Completado { get; set; }
+
+        public SesionRealizada SesionRealizada = null!;
     }
 }

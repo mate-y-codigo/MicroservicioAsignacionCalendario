@@ -8,13 +8,13 @@ namespace MicroservicioAsignacionCalendario.Domain.Entities
 {
     public class AlumnoPlan
     {
-        Guid IdAlumno { get; set; }
-        Guid IdPlanEntrenamiento { get; set; }
-        Guid IdSesionActual { get; set; }
-        DateTimeOffset FechaInicio { get; set; }
-        DateTimeOffset FechaFin { get; set; }
-        Estado Estado { get; set; }
-        string? Notas { get; set; }
-
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid IdAlumno { get; set; }
+        public Guid IdPlanEntrenamiento { get; set; }
+        public Guid IdSesionActual { get; set; }
+        public DateTimeOffset FechaInicio { get; set; }
+        public DateTimeOffset FechaFin { get; set; }
+        public Estado Estado { get; set; }
+        public string? Notas { get; set; }
     }
 }
