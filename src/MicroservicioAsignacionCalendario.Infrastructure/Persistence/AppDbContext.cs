@@ -19,6 +19,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new RecordPersonalConfiguration());
             modelBuilder.ApplyConfiguration(new SesionRealizadaConfiguration());
             modelBuilder.ApplyConfiguration(new EjercicioRegistroConfiguration());
+            modelBuilder.ApplyConfiguration(new EventoCalendarioConfiguration());
         }
     }
 }
