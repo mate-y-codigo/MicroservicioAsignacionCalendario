@@ -16,5 +16,6 @@ namespace MicroservicioAsignacionCalendario.Domain.Entities
         public DateTimeOffset FechaFin { get; set; }
         public Estado Estado { get; set; }
         public string? Notas { get; set; }
+        public ICollection<SesionRealizada> SesionesRealizadas { get; set; } = new List<SesionRealizada>();
     }
 }
