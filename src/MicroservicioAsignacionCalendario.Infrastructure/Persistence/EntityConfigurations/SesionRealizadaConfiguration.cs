@@ -1,0 +1,31 @@
+﻿using MicroservicioAsignacionCalendario.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityConfigurations
+{
+    public class SesionRealizadaConfiguration : IEntityTypeConfiguration<SesionRealizada>
+    {
+        public void Configure(EntityTypeBuilder<SesionRealizada> builder)
+        {
+            builder.ToTable("SesionRealizada");
+
+            builder.HasKey(sr => sr.Id);
+            builder.Property(sr => sr.Id).HasColumnType("uuid");
+            builder.Property(sr => sr.IdSesionEntrenamiento).IsRequired().HasColumnType("uuid");
+            builder.Property(sr => sr.IdPlanAlumno).IsRequired().HasColumnType("uuid");
+            builder.Property(sr => sr.FechaRealizacion).IsRequired().HasColumnType("timestamp with time zone");
+            builder.Property(sr => sr.Estado).IsRequired().HasColumnType("int").HasDefaultValue(0);
+
+            builder.HasOne(sr => sr.AlumnoPlan)
+            .WithMany(ap => ap.SesionesRealizadas)
+            .HasForeignKey(sr => sr.IdPlanAlumno)
+            .OnDelete(DeleteBehavior.Cascade);
+        }
+    }
+}
