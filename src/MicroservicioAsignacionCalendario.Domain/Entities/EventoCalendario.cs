@@ -2,15 +2,15 @@
 {
     public class EventoCalendario
     {
-        Guid Id { get; set; }
-        Guid IdAlumno { get; set; }
-        Guid IdEntrenador { get; set; }
-        Guid IdSesionEntrenamiento { get; set; }
-        DateTimeOffset FechaInicio { get; set; }
-        DateTimeOffset FechaFin { get; set; }
-        Estado Estado { get; set; }
-        string? Notas { get; set; }
-        DateTimeOffset FechaCreacion { get; set; }
-        DateTimeOffset FechaActualizacion { get; set; }
+        public Guid Id { get; set; } = new Guid();
+        public Guid IdAlumno { get; set; }
+        public Guid IdEntrenador { get; set; }
+        public Guid IdSesionEntrenamiento { get; set; }
+        public DateTimeOffset FechaInicio { get; set; }
+        public DateTimeOffset FechaFin { get; set; }
+        public Estado Estado { get; set; }
+        public string? Notas { get; set; }
+        public DateTimeOffset FechaCreacion { get; set; }
+        public DateTimeOffset FechaActualizacion { get; set; }
     }
 }
