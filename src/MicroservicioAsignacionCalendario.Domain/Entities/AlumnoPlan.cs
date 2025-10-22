@@ -16,5 +16,6 @@ namespace MicroservicioAsignacionCalendario.Domain.Entities
         Estado Estado { get; set; }
         string? Notas { get; set; }
 
+        public ICollection<SesionRealizada> SesionesRealizadas { get; set; } = new List<SesionRealizada>();
     }
 }
