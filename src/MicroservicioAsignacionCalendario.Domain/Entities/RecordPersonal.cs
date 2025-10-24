@@ -2,12 +2,12 @@
 {
     public class RecordPersonal
     {
-        Guid Id { get; set; }
-        Guid IdAlumno { get; set; }
-        Guid IdEjercicio { get; set; }
-        decimal PesoMax { get; set; }
-        int Series { get; set; }
-        int Repeticiones { get; set; }
-        DateTimeOffset FechaRegistro { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid IdAlumno { get; set; }
+        public Guid IdEjercicio { get; set; }
+        public decimal PesoMax { get; set; }
+        public int Series { get; set; }
+        public int Repeticiones { get; set; }
+        public DateTimeOffset FechaRegistro { get; set; }
     }
 }
