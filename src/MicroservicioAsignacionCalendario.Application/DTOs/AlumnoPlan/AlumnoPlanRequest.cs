@@ -12,6 +12,8 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan
         public DateTimeOffset FechaInicio { get; set; }
         [Required]
         public DateTimeOffset FechaFin { get; set; }
+        [Required]
+        public int IntervaloDiasDescanso { get; set; }
         public string? Notas { get; set; }
     }
 }

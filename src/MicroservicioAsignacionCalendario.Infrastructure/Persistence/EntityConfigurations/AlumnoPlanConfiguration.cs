@@ -13,6 +13,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.HasKey(ap => ap.Id);
             builder.Property(ap => ap.Estado).HasDefaultValue(Estado.Activo);
             builder.Property(ap => ap.Notas).HasColumnType("text");
+            builder.Property(ap => ap.IntervaloDiasDescanso).HasColumnType("int").IsRequired();
             builder.Property(ap => ap.FechaInicio)
                 .HasColumnType("timestamp without time zone")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")

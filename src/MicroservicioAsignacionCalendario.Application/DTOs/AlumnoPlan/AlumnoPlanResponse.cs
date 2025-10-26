@@ -8,6 +8,7 @@
         public Guid IdSesionActual { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
+        public int IntervaloDiasDescanso { get; set; }
         public int Estado { get; set; }
         public string? Notas { get; set; }
     }
