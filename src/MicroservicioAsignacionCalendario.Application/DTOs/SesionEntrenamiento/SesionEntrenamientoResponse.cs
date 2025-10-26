@@ -1,10 +1,5 @@
 ﻿using MicroservicioAsignacionCalendario.Application.DTOs.EjercicioSesion;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MicroservicioAsignacionCalendario.Application.DTOs.SesionEntrenamiento
 {

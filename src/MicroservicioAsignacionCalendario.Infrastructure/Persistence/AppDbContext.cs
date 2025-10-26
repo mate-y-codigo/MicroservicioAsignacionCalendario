@@ -10,7 +10,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Data
         public DbSet<SesionRealizada> SesionRealizada { get; set; }
         public DbSet<EventoCalendario> EventoCalendario { get; set; }
         public DbSet<AlumnoPlan> AlumnoPlan { get; set; }
-        public DbSet<EjercicioRegistro>  EjercicioRegistro { get; set; }
+        public DbSet<EjercicioRegistro> EjercicioRegistro { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

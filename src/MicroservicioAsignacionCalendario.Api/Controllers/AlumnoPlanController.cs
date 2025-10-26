@@ -1,4 +1,5 @@
 ﻿using MicroservicioAsignacionCalendario.Application.CustomExceptions;
+using MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan;
 using MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,17 +16,17 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
             _service = alumnoPlanService;
         }
 
-        [HttpPost("asignar")]
-        [ProducesResponseType(typeof(object), StatusCodes.Status201Created)]
+        [HttpPost]
+        [ProducesResponseType(typeof(AlumnoPlanResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AsignarPlan([FromBody] object request)
+        public async Task<IActionResult> AsignarPlan([FromBody] AlumnoPlanRequest request)
         {
             var result = await _service.AsignarPlanAsync(request);
             return Ok(result);
         }
 
         [HttpGet("{alumno_id}")]
-        [ProducesResponseType(typeof(IEnumerable<object>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<AlumnoPlanResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ObtenerPlanesPorAlumno([FromRoute] Guid alumno_id)
         {
