@@ -1,7 +1,7 @@
 using MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan;
+using MicroservicioAsignacionCalendario.Application.Interfaces.Clients;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Command;
 using MicroservicioAsignacionCalendario.Application.Interfaces.EventoCalendario;
-using MicroservicioAsignacionCalendario.Application.Interfaces.Micro_PlanEntrenamiento;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
 using MicroservicioAsignacionCalendario.Application.Interfaces.RecordPersonal;
 using MicroservicioAsignacionCalendario.Application.Interfaces.RegistroEjercicio;
@@ -42,6 +42,7 @@ builder.Services.AddScoped<IRecordPersonalService, RecordPersonalService>();
 
 // Set HttpClients
 builder.Services.AddHttpClient<IPlanEntrenamientoClient, PlanEntrenamientoClient>();
+builder.Services.AddHttpClient<IUsuariosClient, UsuariosClient>();
 
 // Set CQRS Handlers
 builder.Services.AddScoped<IAlumnoPlanCommand, AlumnoPlanCommand>();

@@ -15,7 +15,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Queries
         public async Task<AlumnoPlan> ObtenerAlumnoPlan(Guid id)
         {
             return await _context.AlumnoPlan
-                .FirstOrDefaultAsync(ap => ap.Estado == Estado.Activo || ap.Estado == Estado.EnProceso);
+                .FirstOrDefaultAsync(ap => ap.IdAlumno == id && ap.Estado == Estado.Activo || ap.IdAlumno == id && ap.Estado == Estado.EnProceso);
         }
     }
 }

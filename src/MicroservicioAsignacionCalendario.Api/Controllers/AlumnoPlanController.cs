@@ -1,7 +1,6 @@
 ﻿using MicroservicioAsignacionCalendario.Application.CustomExceptions;
 using MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan;
 using MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan;
-using MicroservicioAsignacionCalendario.Application.Interfaces.Micro_PlanEntrenamiento;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroservicioAsignacionCalendario.Api.Controllers
