@@ -1,9 +1,15 @@
 using MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan;
+using MicroservicioAsignacionCalendario.Application.Interfaces.Command;
 using MicroservicioAsignacionCalendario.Application.Interfaces.EventoCalendario;
+using MicroservicioAsignacionCalendario.Application.Interfaces.Micro_PlanEntrenamiento;
+using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
 using MicroservicioAsignacionCalendario.Application.Interfaces.RecordPersonal;
 using MicroservicioAsignacionCalendario.Application.Interfaces.RegistroEjercicio;
 using MicroservicioAsignacionCalendario.Application.Services;
+using MicroservicioAsignacionCalendario.Infrastructure.Clients;
+using MicroservicioAsignacionCalendario.Infrastructure.Commands;
 using MicroservicioAsignacionCalendario.Infrastructure.Data;
+using MicroservicioAsignacionCalendario.Infrastructure.Queries;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +39,13 @@ builder.Services.AddScoped<IAlumnoPlanService, AlumnoPlanService>();
 builder.Services.AddScoped<IEjercicioRegistroService, EjercicioRegistroService>();
 builder.Services.AddScoped<IEventoCalendarioService, EventoCalendarioService>();
 builder.Services.AddScoped<IRecordPersonalService, RecordPersonalService>();
+
+// Set HttpClients
+builder.Services.AddHttpClient<IPlanEntrenamientoClient, PlanEntrenamientoClient>();
+
+// Set CQRS Handlers
+builder.Services.AddScoped<IAlumnoPlanCommand, AlumnoPlanCommand>();
+builder.Services.AddScoped<IAlumnoPlanQuery, AlumnoPlanQuery>();
 
 var app = builder.Build();
 

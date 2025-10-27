@@ -1,4 +1,6 @@
-﻿namespace MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan
+﻿using MicroservicioAsignacionCalendario.Domain.Entities;
+
+namespace MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan
 {
     public class AlumnoPlanResponse
     {
@@ -9,7 +11,7 @@
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
         public int IntervaloDiasDescanso { get; set; }
-        public int Estado { get; set; }
+        public Estado Estado { get; set; }
         public string? Notas { get; set; }
     }
 }

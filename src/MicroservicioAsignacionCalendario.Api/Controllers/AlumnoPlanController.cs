@@ -1,6 +1,7 @@
 ﻿using MicroservicioAsignacionCalendario.Application.CustomExceptions;
 using MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan;
 using MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan;
+using MicroservicioAsignacionCalendario.Application.Interfaces.Micro_PlanEntrenamiento;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroservicioAsignacionCalendario.Api.Controllers
@@ -21,8 +22,24 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AsignarPlan([FromBody] AlumnoPlanRequest request)
         {
-            var result = await _service.AsignarPlanAsync(request);
-            return Ok(result);
+            try
+            {
+                var result = await _service.AsignarPlanAsync(request);
+                return new JsonResult(result) { StatusCode = 201 };
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new ApiError { Message = ex.Message });
+            }
+            catch (ConflictException ex)
+            {
+                return Conflict(new ApiError { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, new ApiError { Message = "Error interno del servidor." });
+            }
         }
 
         [HttpGet("{alumno_id}")]

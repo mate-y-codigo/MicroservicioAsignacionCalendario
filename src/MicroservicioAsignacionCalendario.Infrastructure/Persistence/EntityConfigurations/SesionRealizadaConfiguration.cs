@@ -16,7 +16,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.Property(sr => sr.IdPlanAlumno).IsRequired().HasColumnType("uuid");
             builder.Property(sr => sr.Estado).IsRequired().HasColumnType("int").HasDefaultValue(Estado.Activo);
             builder.Property(sr => sr.FechaRealizacion)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .IsRequired();
 

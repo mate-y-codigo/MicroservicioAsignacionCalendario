@@ -16,19 +16,19 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.Property(ec => ec.IdEntrenador).IsRequired().HasColumnType("uuid");
             builder.Property(ec => ec.IdSesionEntrenamiento).IsRequired().HasColumnType("uuid");
             builder.Property(ec => ec.FechaInicio)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .IsRequired();
             builder.Property(ec => ec.FechaFin)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .IsRequired();
             builder.Property(ec => ec.Estado).IsRequired().HasColumnType("int").HasDefaultValue(Estado.Activo);
             builder.Property(ec => ec.Notas).HasColumnType("text");
             builder.Property(ec => ec.FechaCreacion)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .IsRequired();
             builder.Property(ec => ec.FechaActualizacion)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .IsRequired();
         }
     }

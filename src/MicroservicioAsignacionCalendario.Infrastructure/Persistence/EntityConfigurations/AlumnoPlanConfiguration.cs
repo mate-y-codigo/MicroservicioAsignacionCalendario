@@ -15,11 +15,11 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.Property(ap => ap.Notas).HasColumnType("text");
             builder.Property(ap => ap.IntervaloDiasDescanso).HasColumnType("int").IsRequired();
             builder.Property(ap => ap.FechaInicio)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .IsRequired();
             builder.Property(ap => ap.FechaFin)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .IsRequired();
 
             builder.Property(ap => ap.IdAlumno).HasColumnType("uuid").IsRequired();

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initMicroAsignacion : Migration
+    public partial class initMicro : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,8 +19,8 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     IdAlumno = table.Column<Guid>(type: "uuid", nullable: false),
                     IdPlanEntrenamiento = table.Column<Guid>(type: "uuid", nullable: false),
                     IdSesionActual = table.Column<Guid>(type: "uuid", nullable: false),
-                    FechaInicio = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    FechaFin = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    FechaInicio = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    FechaFin = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IntervaloDiasDescanso = table.Column<int>(type: "int", nullable: false),
                     Estado = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
                     Notas = table.Column<string>(type: "text", nullable: true)
@@ -38,12 +38,12 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     IdAlumno = table.Column<Guid>(type: "uuid", nullable: false),
                     IdEntrenador = table.Column<Guid>(type: "uuid", nullable: false),
                     IdSesionEntrenamiento = table.Column<Guid>(type: "uuid", nullable: false),
-                    FechaInicio = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    FechaFin = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    FechaInicio = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    FechaFin = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Estado = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     Notas = table.Column<string>(type: "text", nullable: true),
-                    FechaCreacion = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    FechaActualizacion = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    FechaCreacion = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    FechaActualizacion = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,7 +60,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     PesoMax = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
                     Series = table.Column<int>(type: "int", nullable: false),
                     Repeticiones = table.Column<int>(type: "int", nullable: false),
-                    FechaRegistro = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
+                    FechaRegistro = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
                 },
                 constraints: table =>
                 {
@@ -74,7 +74,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     IdSesionEntrenamiento = table.Column<Guid>(type: "uuid", nullable: false),
                     IdPlanAlumno = table.Column<Guid>(type: "uuid", nullable: false),
-                    FechaRealizacion = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    FechaRealizacion = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     Estado = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
                 },
                 constraints: table =>

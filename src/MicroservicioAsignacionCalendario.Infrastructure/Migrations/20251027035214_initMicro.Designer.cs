@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251027000600_initMicroAsignacion")]
-    partial class initMicroAsignacion
+    [Migration("20251027035214_initMicro")]
+    partial class initMicro
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,11 +37,11 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                         .HasDefaultValue(0);
 
                     b.Property<DateTime>("FechaFin")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("FechaInicio")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<Guid>("IdAlumno")
@@ -109,18 +109,18 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                         .HasDefaultValue(0);
 
                     b.Property<DateTime>("FechaActualizacion")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("FechaCreacion")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime>("FechaFin")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("FechaInicio")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("IdAlumno")
                         .HasColumnType("uuid");
@@ -147,7 +147,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
 
                     b.Property<DateTime>("FechaRegistro")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<Guid>("IdAlumno")
@@ -183,7 +183,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
 
                     b.Property<DateTime>("FechaRealizacion")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<Guid>("IdPlanAlumno")
