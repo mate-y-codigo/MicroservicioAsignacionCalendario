@@ -9,9 +9,9 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan
         [Required]
         public Guid IdPlanEntrenamiento { get; set; }
         [Required]
-        public DateTimeOffset FechaInicio { get; set; }
+        public DateTime FechaInicio { get; set; }
         [Required]
-        public DateTimeOffset FechaFin { get; set; }
+        public DateTime FechaFin { get; set; }
         [Required]
         public int IntervaloDiasDescanso { get; set; }
         public string? Notas { get; set; }

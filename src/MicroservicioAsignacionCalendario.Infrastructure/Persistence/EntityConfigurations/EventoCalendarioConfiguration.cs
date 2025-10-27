@@ -21,7 +21,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.Property(ec => ec.FechaFin)
                 .HasColumnType("timestamp without time zone")
                 .IsRequired();
-            builder.Property(ec => ec.Estado).IsRequired().HasColumnType("int").HasDefaultValue(0);
+            builder.Property(ec => ec.Estado).IsRequired().HasColumnType("int").HasDefaultValue(Estado.Activo);
             builder.Property(ec => ec.Notas).HasColumnType("text");
             builder.Property(ec => ec.FechaCreacion)
                 .HasColumnType("timestamp without time zone")
