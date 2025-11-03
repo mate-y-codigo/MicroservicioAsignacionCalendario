@@ -8,12 +8,12 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.SesionEntrenamiento
         [Required]
         public Guid Id { get; set; }
         [Required]
-        public Guid IdTrainingPlan { get; set; }
+        public Guid PlanEntrenamientoId { get; set; }
         [Required]
-        public string Name { get; set; }
+        public string Nombre { get; set; }
         [Required]
-        public int Order { get; set; }
+        public int Orden { get; set; }
         [Required]
-        public List<EjercicioSesionShortResponse> ExerciseSessions { get; set; }
+        public List<EjercicioSesionShortResponse> SesionesEjercicio { get; set; }
     }
 }

@@ -8,18 +8,20 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento
         [Required]
         public Guid Id { get; set; }
         [Required]
-        public string Name { get; set; }
+        public Guid IdEntrenador { get; set; }
         [Required]
-        public string Description { get; set; }
+        public string Nombre { get; set; }
         [Required]
-        public bool IsTemplate { get; set; }
+        public string Descripcion { get; set; }
         [Required]
-        public DateTime CreateDate { get; set; }
+        public bool EsPlantilla { get; set; }
         [Required]
-        public DateTime UpdateDate { get; set; }
+        public DateTime FechaCreacion { get; set; }
         [Required]
-        public bool Active { get; set; }
+        public DateTime FechaActualizacion { get; set; }
         [Required]
-        public List<SesionEntrenamientoResponse> TrainingSessions { get; set; }
+        public bool Activo { get; set; }
+        [Required]
+        public List<SesionEntrenamientoResponse> SesionesEntrenamiento { get; set; }
     }
 }
