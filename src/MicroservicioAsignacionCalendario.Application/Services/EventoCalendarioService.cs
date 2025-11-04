@@ -1,7 +1,8 @@
-﻿using MicroservicioAsignacionCalendario.Application.DTOs.EventoCalendario;
-using MicroservicioAsignacionCalendario.Application.Interfaces.EventoCalendario;
+﻿using Application.DTOs.EventoCalendario;
+using Application.Interfaces.EventoCalendario;
+using MicroservicioAsignacionCalendario.Application.DTOs.EventoCalendario;
 
-namespace MicroservicioAsignacionCalendario.Application.Services
+namespace Application.Services
 {
     public class EventoCalendarioService : IEventoCalendarioService
     {

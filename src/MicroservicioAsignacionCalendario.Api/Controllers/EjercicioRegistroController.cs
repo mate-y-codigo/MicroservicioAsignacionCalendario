@@ -21,16 +21,28 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RegistrarEjercicio([FromBody] EjercicioRegistroRequest registro)
         {
-            var result = await _service.RegistrarEjercicioAsync(registro);
-            return Ok(result);
+            try
+            {
+                var result = await _service.RegistrarEjercicioAsync(registro);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ApiError { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, new ApiError { Message = "Error interno del servidor." });
+            }
         }
 
-        [HttpGet("{alumno_id}")]
+        [HttpGet]
         [ProducesResponseType(typeof(List<EjercicioRegistroResponse>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ObtenerRegistros([FromRoute] Guid alumno_id, [FromQuery] EjercicioRegistroFilterRequest filtros)
+        [ProducesResponseType(typeof(ApiError), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ObtenerRegistros([FromQuery] EjercicioRegistroFilterRequest filtros)
         {
-            var result = await _service.ObtenerRegistrosAsync(alumno_id, filtros);
+            var result = await _service.ObtenerRegistrosAsync(filtros);
             return Ok(result);
         }
     }

@@ -9,7 +9,7 @@
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
         public int IntervaloDiasDescanso { get; set; }
-        public Estado Estado { get; set; } = Estado.Activo;
+        public EstadoAlumnoPlan Estado { get; set; } = EstadoAlumnoPlan.Activo;
         public string? Notas { get; set; }
         public ICollection<SesionRealizada> SesionesRealizadas { get; set; } = new List<SesionRealizada>();
     }

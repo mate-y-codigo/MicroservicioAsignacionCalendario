@@ -7,8 +7,8 @@
         public Guid IdEntrenador { get; set; }
         public Guid IdSesionEntrenamiento { get; set; }
         public DateTime FechaInicio { get; set; }
-        public DateTime FechaFin { get; set; }
-        public Estado Estado { get; set; } = Estado.Activo;
+        public DateTime? FechaFin { get; set; }
+        public EstadoEvento Estado { get; set; } = EstadoEvento.Programado;
         public string? Notas { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaActualizacion { get; set; }

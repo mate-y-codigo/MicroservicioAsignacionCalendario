@@ -21,7 +21,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.Property(ec => ec.FechaFin)
                 .HasColumnType("timestamp with time zone")
                 .IsRequired();
-            builder.Property(ec => ec.Estado).IsRequired().HasColumnType("int").HasDefaultValue(Estado.Activo);
+            builder.Property(ec => ec.Estado).IsRequired().HasColumnType("int").HasDefaultValue(EstadoEvento.Programado);
             builder.Property(ec => ec.Notas).HasColumnType("text");
             builder.Property(ec => ec.FechaCreacion)
                 .HasColumnType("timestamp with time zone")
@@ -29,7 +29,8 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
                 .IsRequired();
             builder.Property(ec => ec.FechaActualizacion)
                 .HasColumnType("timestamp with time zone")
-                .IsRequired();
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

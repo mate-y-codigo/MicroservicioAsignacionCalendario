@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.Command
 {
-    public interface IAlumnoPlanCommand
+    public interface IEjercicioRegistroCommand
     {
-        Task InsertarAlumnoPlan(AlumnoPlan alumnoPlan);
+        Task InsertarEjercicioRegistro(EjercicioRegistro ejercicioRegistro);
     }
 }

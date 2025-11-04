@@ -1,4 +1,6 @@
-﻿using MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento;
+﻿using MicroservicioAsignacionCalendario.Application.DTOs.EjercicioSesion;
+using MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento;
+using MicroservicioAsignacionCalendario.Application.DTOs.SesionEntrenamiento;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Clients;
 using System;
 using System.Collections.Generic;
@@ -13,7 +15,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Clients
     public class PlanEntrenamientoClient : IPlanEntrenamientoClient
     {
         private readonly HttpClient _httpClient;
-        private readonly string _urlBase = "http://localhost:5097/api/TrainingPlan";
+        private readonly string _urlBase = "http://localhost:5097";
 
         public PlanEntrenamientoClient(HttpClient httpClient)
         {
@@ -25,12 +27,27 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Clients
             try
             {
                 return await _httpClient.GetFromJsonAsync<PlanEntrenamientoResponse>(
-                    $"{_urlBase}/{id}",
+                    $"{_urlBase}/api/TrainingPlan/{id}",
                     ct);
             }
             catch (HttpRequestException ex)
             {
                 Console.WriteLine($"Error al obtener un plan de entrenamiento: {ex.Message}");
+                return null;
+            }
+        }
+
+        public async Task<SesionEntrenamientoResponse> ObtenerSesionEntrenamiento(Guid id, CancellationToken ct)
+        {
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<SesionEntrenamientoResponse>(
+                    $"{_urlBase}/api/TrainningSession/{id}",
+                   ct);
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error al obtener una sesion de entrenamiento: {ex.Message}");
                 return null;
             }
         }

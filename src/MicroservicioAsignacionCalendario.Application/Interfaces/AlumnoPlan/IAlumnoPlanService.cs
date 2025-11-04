@@ -1,4 +1,5 @@
-﻿using MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan;
+﻿using Application.DTOs.AlumnoPlan;
+using MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan;
 
 namespace MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan
 {

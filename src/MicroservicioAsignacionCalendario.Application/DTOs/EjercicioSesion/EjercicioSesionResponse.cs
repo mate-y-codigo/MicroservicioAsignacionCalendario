@@ -17,6 +17,6 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.EjercicioSesion
         [Required]
         public int Orden { get; set; }
         [Required]
-        public Ejercicio Ejercicio { get; set; }
+        public EjercicioResponse Ejercicio { get; set; }
     }
 }

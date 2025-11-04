@@ -4,11 +4,12 @@ using MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento;
 using MicroservicioAsignacionCalendario.Application.DTOs.Usuario;
 using MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Clients;
-using MicroservicioAsignacionCalendario.Application.Interfaces.Command;
+using Application.Interfaces.Command;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
 using MicroservicioAsignacionCalendario.Domain.Entities;
+using Application.DTOs.AlumnoPlan;
 
-namespace MicroservicioAsignacionCalendario.Application.Services
+namespace Application.Services
 {
     public class AlumnoPlanService : IAlumnoPlanService
     {
@@ -44,8 +45,8 @@ namespace MicroservicioAsignacionCalendario.Application.Services
             if (req.FechaInicio > req.FechaFin || req.FechaInicio < DateTime.UtcNow)
                 throw new BadRequestException("Rango de fechas inválido");
 
-            var primerSesionEntrenamiento = plan.TrainingSessions
-                .SingleOrDefault(s => s.Order == 1);
+            var primerSesionEntrenamiento = plan.SesionesEntrenamiento
+                .SingleOrDefault(s => s.Orden == 1);
 
             if (primerSesionEntrenamiento == null)
                 throw new BadRequestException("El plan de entrenamiento no tiene sesiones definidas o está corrupto.");
@@ -62,13 +63,13 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 FechaFin = req.FechaFin,
                 IntervaloDiasDescanso = req.IntervaloDiasDescanso,
                 Notas = req.Notas != null ? req.Notas.Trim() : "",
-                Estado = Estado.Activo,
+                Estado = EstadoAlumnoPlan.Activo,
                 IdSesionActual = primerSesionEntrenamiento.Id,
             };
 
             await _command.InsertarAlumnoPlan(alumnoPlan);
 
-            var alumnoPlanResponse = new AlumnoPlanResponse
+            return new AlumnoPlanResponse
             {
                 Id = alumnoPlan.Id,
                 IdAlumno = alumnoPlan.IdAlumno,
@@ -80,8 +81,6 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 Estado = alumnoPlan.Estado,
                 IdSesionActual = alumnoPlan.IdSesionActual
             };
-
-            return alumnoPlanResponse;
         }
 
         // TO DO: Implementar método

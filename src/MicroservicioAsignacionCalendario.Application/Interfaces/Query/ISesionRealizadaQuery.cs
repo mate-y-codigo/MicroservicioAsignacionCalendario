@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces.Command
+namespace Application.Interfaces.Query
 {
-    public interface IAlumnoPlanCommand
+    public interface ISesionRealizadaQuery
     {
-        Task InsertarAlumnoPlan(AlumnoPlan alumnoPlan);
+        Task<SesionRealizada> ObtenerSesionRealizadaPorId(Guid id);
     }
 }

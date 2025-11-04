@@ -14,9 +14,8 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.EjercicioRegistro
         public int Repeticiones { get; set; }
         [Required]
         public decimal Peso { get; set; }
-
-        // TO DO: Ver si es necesario
-        [Required]
-        public bool Completado { get; set; }
+        //// TO DO: Ver si es necesario
+        //[Required]
+        //public bool Completado { get; set; }
     }
 }

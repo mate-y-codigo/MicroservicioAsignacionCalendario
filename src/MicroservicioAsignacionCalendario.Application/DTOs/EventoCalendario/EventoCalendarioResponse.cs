@@ -1,6 +1,6 @@
 ﻿using MicroservicioAsignacionCalendario.Domain.Entities;
 
-namespace MicroservicioAsignacionCalendario.Application.DTOs.EventoCalendario
+namespace Application.DTOs.EventoCalendario
 {
     public class EventoCalendarioResponse
     {
@@ -10,7 +10,7 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.EventoCalendario
         public Guid IdSesionEntrenamiento { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
-        public Estado Estado { get; set; }
+        public EstadoEvento Estado { get; set; }
         public string Notas { get; set; }
     }
 }

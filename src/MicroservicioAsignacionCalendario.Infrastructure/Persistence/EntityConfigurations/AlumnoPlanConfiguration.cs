@@ -11,7 +11,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.ToTable("AlumnoPlan");
 
             builder.HasKey(ap => ap.Id);
-            builder.Property(ap => ap.Estado).HasDefaultValue(Estado.Activo);
+            builder.Property(ap => ap.Estado).HasDefaultValue(EstadoAlumnoPlan.Activo);
             builder.Property(ap => ap.Notas).HasColumnType("text");
             builder.Property(ap => ap.IntervaloDiasDescanso).HasColumnType("int").IsRequired();
             builder.Property(ap => ap.FechaInicio)
@@ -20,7 +20,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
                 .IsRequired();
             builder.Property(ap => ap.FechaFin)
                 .HasColumnType("timestamp with time zone")
-                .IsRequired();
+                .HasDefaultValueSql("NOW() + INTERVAL '2 weeks'");
 
             builder.Property(ap => ap.IdAlumno).HasColumnType("uuid").IsRequired();
             builder.Property(ap => ap.IdPlanEntrenamiento).HasColumnType("uuid").IsRequired();

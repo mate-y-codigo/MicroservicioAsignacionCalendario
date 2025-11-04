@@ -5,6 +5,6 @@ namespace MicroservicioAsignacionCalendario.Application.Interfaces.RegistroEjerc
     public interface IEjercicioRegistroService
     {
         Task<EjercicioRegistroResponse> RegistrarEjercicioAsync(EjercicioRegistroRequest registro);
-        Task<List<EjercicioRegistroResponse>> ObtenerRegistrosAsync(Guid alumno_id, EjercicioRegistroFilterRequest filtros);
+        Task<List<EjercicioRegistroResponse>> ObtenerRegistrosAsync(EjercicioRegistroFilterRequest filtros);
     }
 }

@@ -1,9 +1,9 @@
-﻿using MicroservicioAsignacionCalendario.Application.Interfaces.Command;
+﻿using Application.Interfaces.Command;
 using MicroservicioAsignacionCalendario.Domain.Entities;
 using MicroservicioAsignacionCalendario.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace MicroservicioAsignacionCalendario.Infrastructure.Commands
+namespace Infrastructure.Commands
 {
     public class AlumnoPlanCommand : IAlumnoPlanCommand
     {
