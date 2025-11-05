@@ -427,5 +427,4 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
-src/MicroservicioAsignacionCalendario.Api/appsettings.json
-src/MicroservicioAsignacionCalendario.Api/appsettings.Development.json
+src/MicroservicioAsignacionCalendario.Api/appsettings*.json
