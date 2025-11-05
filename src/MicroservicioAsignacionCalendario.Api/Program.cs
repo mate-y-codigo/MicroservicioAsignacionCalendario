@@ -1,4 +1,3 @@
-using Application.DTOs.AlumnoPlan;
 using Application.Interfaces.Command;
 using Application.Interfaces.EventoCalendario;
 using Application.Interfaces.Query;
@@ -16,6 +15,8 @@ using MicroservicioAsignacionCalendario.Infrastructure.Commands;
 using MicroservicioAsignacionCalendario.Infrastructure.Data;
 using MicroservicioAsignacionCalendario.Infrastructure.Queries;
 using Microsoft.EntityFrameworkCore;
+using MicroservicioAsignacionCalendario.Application.Mapper;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,9 @@ builder.Services.AddScoped<IAlumnoPlanQuery, AlumnoPlanQuery>();
 builder.Services.AddScoped<IEjercicioRegistroCommand, EjercicioRegistroCommand>();
 builder.Services.AddScoped<IEjercicioRegistroQuery, EjercicioRegistroQuery>();
 builder.Services.AddScoped<ISesionRealizadaQuery, SesionesRealizadasQuery>();
+
+// Set Mapper
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
 
 var app = builder.Build();
 

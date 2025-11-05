@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Command;
 using Application.Interfaces.Query;
+using AutoMapper;
 using MicroservicioAsignacionCalendario.Application.CustomExceptions;
 using MicroservicioAsignacionCalendario.Application.DTOs.EjercicioRegistro;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Clients;
@@ -10,12 +11,14 @@ namespace MicroservicioAsignacionCalendario.Application.Services
 {
     public class EjercicioRegistroService : IEjercicioRegistroService
     {
+        private readonly IMapper _mapper;
         private readonly IPlanEntrenamientoClient _planEntrenamientoClient;
         private readonly ISesionRealizadaQuery _sesionRealizadaQuery;
         private readonly IEjercicioRegistroCommand _command;
-        public EjercicioRegistroService(IEjercicioRegistroCommand command, IPlanEntrenamientoClient planEntrenamientoClient, ISesionRealizadaQuery query)
+        public EjercicioRegistroService(IMapper mapper, IEjercicioRegistroCommand command, IPlanEntrenamientoClient planEntrenamientoClient, ISesionRealizadaQuery query)
         {
             _command = command;
+            _mapper = mapper;
             _planEntrenamientoClient = planEntrenamientoClient;
             _sesionRealizadaQuery = query;
         }
@@ -34,27 +37,14 @@ namespace MicroservicioAsignacionCalendario.Application.Services
             if (ejercicioPlanificado == null)
                 throw new NotFoundException("El ejercicio no existe o no pertenece a la sesion de entrenamiento");
 
-            EjercicioRegistro ejercicioRegistro = new EjercicioRegistro
-            {
-                IdSesionRealizada = req.IdSesionRealizada,
-                IdEjercicio = req.IdEjercicio,
-                Peso = req.Peso,
-                Repeticiones = req.Repeticiones,
-                Series = req.Series,
-            };
+            var ejercicioRegistro = _mapper.Map<EjercicioRegistro>(req);
+            ejercicioRegistro.PesoObjetivo = (decimal)ejercicioPlanificado.PesoObjetivo;
+            ejercicioRegistro.SeriesObjetivo = ejercicioPlanificado.SeriesObjetivo;
+            ejercicioRegistro.RepeticionesObjetivo = ejercicioPlanificado.RepeticionesObjetivo;
 
             await _command.InsertarEjercicioRegistro(ejercicioRegistro);
 
-            return new EjercicioRegistroResponse
-            {
-                Id = ejercicioRegistro.Id,
-                IdSesionRealizada = ejercicioRegistro.IdSesionRealizada,
-                IdEjercicio = ejercicioRegistro.IdEjercicio,
-                Series = ejercicioRegistro.Series,
-                Repeticiones = ejercicioRegistro.Repeticiones,
-                Peso = ejercicioRegistro.Peso,
-                Completado = ejercicioRegistro.Completado,
-            };
+            return _mapper.Map<EjercicioRegistroResponse>(ejercicioRegistro);
         }
 
         // TO DO: Implementar método

@@ -8,17 +8,20 @@ using Application.Interfaces.Command;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
 using MicroservicioAsignacionCalendario.Domain.Entities;
 using Application.DTOs.AlumnoPlan;
+using AutoMapper;
 
 namespace Application.Services
 {
     public class AlumnoPlanService : IAlumnoPlanService
     {
+        private readonly IMapper _mapper;
         private readonly IPlanEntrenamientoClient _planEntrenamientoClient;
         private readonly IUsuariosClient _usuariosClient;
         private readonly IAlumnoPlanCommand _command;
         private readonly IAlumnoPlanQuery _query;
-        public AlumnoPlanService(IAlumnoPlanCommand command, IAlumnoPlanQuery query, IUsuariosClient usuariosClient, IPlanEntrenamientoClient planEntrenamientoClient)
+        public AlumnoPlanService(IMapper mapper, IAlumnoPlanCommand command, IAlumnoPlanQuery query, IUsuariosClient usuariosClient, IPlanEntrenamientoClient planEntrenamientoClient)
         {
+            _mapper = mapper;
             _planEntrenamientoClient = planEntrenamientoClient;
             _usuariosClient = usuariosClient;
             _command = command;
@@ -55,32 +58,12 @@ namespace Application.Services
             if (planAsociado != null)
                 throw new ConflictException("El alumno ya tiene un plan de entrenamiento asignado.");
 
-            var alumnoPlan = new AlumnoPlan
-            {
-                IdAlumno = req.IdAlumno,
-                IdPlanEntrenamiento = req.IdPlanEntrenamiento,
-                FechaInicio = req.FechaInicio,
-                FechaFin = req.FechaFin,
-                IntervaloDiasDescanso = req.IntervaloDiasDescanso,
-                Notas = req.Notas != null ? req.Notas.Trim() : "",
-                Estado = EstadoAlumnoPlan.Activo,
-                IdSesionActual = primerSesionEntrenamiento.Id,
-            };
+            var alumnoPlan = _mapper.Map<AlumnoPlan>(req);
+            alumnoPlan.IdSesionActual = primerSesionEntrenamiento.Id;
 
             await _command.InsertarAlumnoPlan(alumnoPlan);
 
-            return new AlumnoPlanResponse
-            {
-                Id = alumnoPlan.Id,
-                IdAlumno = alumnoPlan.IdAlumno,
-                IdPlanEntrenamiento = alumnoPlan.IdPlanEntrenamiento,
-                FechaInicio = alumnoPlan.FechaInicio,
-                FechaFin = alumnoPlan.FechaFin,
-                IntervaloDiasDescanso = alumnoPlan.IntervaloDiasDescanso,
-                Notas = alumnoPlan.Notas,
-                Estado = alumnoPlan.Estado,
-                IdSesionActual = alumnoPlan.IdSesionActual
-            };
+            return _mapper.Map<AlumnoPlanResponse>(alumnoPlan);
         }
 
         // TO DO: Implementar método
