@@ -1,7 +1,9 @@
-﻿namespace MicroservicioAsignacionCalendario.Application.Interfaces.RecordPersonal
+﻿using MicroservicioAsignacionCalendario.Application.DTOs.RecordPersonal;
+
+namespace MicroservicioAsignacionCalendario.Application.Interfaces.RecordPersonal
 {
     public interface IRecordPersonalService
     {
-        Task<object> ObtenerRecordPersonalAsync(Guid alumno_id);
+        Task<List<RecordPersonalResponse>> ObtenerRecordsPersonalesAsync(Guid alumno_id);
     }
 }

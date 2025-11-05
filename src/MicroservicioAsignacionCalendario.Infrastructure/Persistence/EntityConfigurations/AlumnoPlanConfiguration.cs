@@ -1,11 +1,6 @@
 ﻿using MicroservicioAsignacionCalendario.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityConfigurations
 {
@@ -16,15 +11,16 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.ToTable("AlumnoPlan");
 
             builder.HasKey(ap => ap.Id);
-            builder.Property(ap => ap.Estado).HasDefaultValue(Estado.Activo);
+            builder.Property(ap => ap.Estado).HasDefaultValue(EstadoAlumnoPlan.Activo);
             builder.Property(ap => ap.Notas).HasColumnType("text");
+            builder.Property(ap => ap.IntervaloDiasDescanso).HasColumnType("int").IsRequired();
             builder.Property(ap => ap.FechaInicio)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .IsRequired();
             builder.Property(ap => ap.FechaFin)
-                .HasColumnType("timestamp without time zone")
-                .IsRequired();
+                .HasColumnType("timestamp with time zone")
+                .HasDefaultValueSql("NOW() + INTERVAL '2 weeks'");
 
             builder.Property(ap => ap.IdAlumno).HasColumnType("uuid").IsRequired();
             builder.Property(ap => ap.IdPlanEntrenamiento).HasColumnType("uuid").IsRequired();

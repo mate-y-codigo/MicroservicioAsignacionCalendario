@@ -5,24 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicroservicioAsignacionCalendario.Application.DTOs.EjercicioSesion
+namespace MicroservicioAsignacionCalendario.Application.DTOs.Usuario
 {
-    public class Ejercicio
+    public class UsuarioResponse
     {
         [Required]
         public Guid Id { get; set; }
         [Required]
         public string Nombre { get; set; }
         [Required]
-        public string MusculoPrincipal { get; set; }
+        public string Apellido { get; set; }
         [Required]
-        public string GrupoMuscular { get; set; }
+        public string Email { get; set; }
         [Required]
-        public string? UrlDemo { get; set; }
+        public string Celular { get; set; }
         [Required]
-        public bool Activo { get; set; }
+        public Guid RolId { get; set; }
         [Required]
-        public Categoria Categoria { get; set; }
-
+        public DateTime CreadoEn { get; set; }
     }
 }

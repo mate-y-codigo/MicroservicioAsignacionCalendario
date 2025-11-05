@@ -1,7 +1,10 @@
-﻿namespace MicroservicioAsignacionCalendario.Application.Interfaces.EventoCalendario
+﻿using Application.DTOs.EventoCalendario;
+using MicroservicioAsignacionCalendario.Application.DTOs.EventoCalendario;
+
+namespace Application.Interfaces.EventoCalendario
 {
     public interface IEventoCalendarioService
     {
-        Task<object> ObtenerEventosAsync(DateTime? desde, DateTime? hasta, string? alumnoId);
+        Task<List<EventoCalendarioResponse>> ObtenerEventosAsync(EventoCalendarioFilterRequest filtros);
     }
 }

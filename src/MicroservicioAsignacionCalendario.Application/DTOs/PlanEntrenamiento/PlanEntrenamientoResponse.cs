@@ -1,10 +1,5 @@
 ﻿using MicroservicioAsignacionCalendario.Application.DTOs.SesionEntrenamiento;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento
 {
@@ -12,6 +7,8 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento
     {
         [Required]
         public Guid Id { get; set; }
+        [Required]
+        public Guid IdEntrenador { get; set; }
         [Required]
         public string Nombre { get; set; }
         [Required]

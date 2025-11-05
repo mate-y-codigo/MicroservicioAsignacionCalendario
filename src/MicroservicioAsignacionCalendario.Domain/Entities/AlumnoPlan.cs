@@ -6,9 +6,10 @@
         public Guid IdAlumno { get; set; }
         public Guid IdPlanEntrenamiento { get; set; }
         public Guid IdSesionActual { get; set; }
-        public DateTimeOffset FechaInicio { get; set; }
-        public DateTimeOffset FechaFin { get; set; }
-        public Estado Estado { get; set; }
+        public DateTime FechaInicio { get; set; }
+        public DateTime FechaFin { get; set; }
+        public int IntervaloDiasDescanso { get; set; }
+        public EstadoAlumnoPlan Estado { get; set; } = EstadoAlumnoPlan.Activo;
         public string? Notas { get; set; }
         public ICollection<SesionRealizada> SesionesRealizadas { get; set; } = new List<SesionRealizada>();
     }

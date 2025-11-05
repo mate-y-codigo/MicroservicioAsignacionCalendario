@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MicroservicioAsignacionCalendario.Application.DTOs.EjercicioSesion
 {
@@ -12,6 +7,14 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.EjercicioSesion
         [Required]
         public Guid Id { get; set; }
         [Required]
-        public Guid EjercicioId { get; set; }
+        public Guid IdEjercicio { get; set; }
+        [Required]
+        public string NombreEjercicio { get; set; }
+        [Required]
+        public int SeriesObjetivo { get; set; }
+        [Required]
+        public int RepeticionesObjetivo { get; set; }
+        [Required]
+        public float PesoObjetivo { get; set; }
     }
 }
