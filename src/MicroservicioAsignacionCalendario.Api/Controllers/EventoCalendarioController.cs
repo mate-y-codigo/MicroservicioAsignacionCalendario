@@ -1,5 +1,4 @@
-﻿using Application.DTOs.EventoCalendario;
-using Application.Interfaces.EventoCalendario;
+﻿using Application.Interfaces.EventoCalendario;
 using MicroservicioAsignacionCalendario.Application.CustomExceptions;
 using MicroservicioAsignacionCalendario.Application.DTOs.EventoCalendario;
 using Microsoft.AspNetCore.Mvc;
