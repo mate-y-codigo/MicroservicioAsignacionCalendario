@@ -2,6 +2,7 @@
 using AutoMapper;
 using MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan;
 using MicroservicioAsignacionCalendario.Application.DTOs.EjercicioRegistro;
+using MicroservicioAsignacionCalendario.Application.DTOs.SesionRealizada;
 using MicroservicioAsignacionCalendario.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -34,10 +35,18 @@ namespace MicroservicioAsignacionCalendario.Application.Mapper
 
             // EjercicioRegistro
             CreateMap<EjercicioRegistroRequest, EjercicioRegistro>()
+                .ForMember(dest => dest.IdSesionRealizada, opt => opt.Ignore())
                 .ForMember(dest => dest.PesoObjetivo, opt => opt.Ignore())
                 .ForMember(dest => dest.RepeticionesObjetivo, opt => opt.Ignore())
                 .ForMember(dest => dest.SeriesObjetivo, opt => opt.Ignore());
             CreateMap<EjercicioRegistro, EjercicioRegistroResponse>();
+
+            // SesionRealizada
+            CreateMap<SesionRealizadaRequest, SesionRealizada>()
+                .ForMember(dest => dest.IdPlanAlumno, opt => opt.Ignore())
+                .ForMember(dest => dest.Estado, opt => opt.Ignore())
+                .ForMember(dest => dest.EjerciciosRegistrados, opt => opt.Ignore());
+            CreateMap<SesionRealizada, SesionRealizadaResponse>();
         }
     }
 }

@@ -42,7 +42,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Clients
             try
             {
                 return await _httpClient.GetFromJsonAsync<SesionEntrenamientoResponse>(
-                    $"{_urlBase}/api/TrainningSession/{id}",
+                    $"{_urlBase}/api/TrainingSession/{id}",
                    ct);
             }
             catch (HttpRequestException ex)

@@ -1,17 +1,19 @@
 ﻿using MicroservicioAsignacionCalendario.Application.DTOs.EjercicioSesion;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace MicroservicioAsignacionCalendario.Application.DTOs.SesionEntrenamiento
 {
-    public class SesionEntrenamientoResponse
+    public class SesionEntrenamientoConPlanResponse
     {
+        [Required]
         public Guid Id { get; set; }
-        public string Nombre { get; set; } = string.Empty;
+        [Required]
+        public Guid PlanEntrenamientoId { get; set; }
+        [Required]
+        public string Nombre { get; set; }
+        [Required]
         public int Orden { get; set; }
+        [Required]
         public List<EjercicioSesionShortResponse> SesionesEjercicio { get; set; }
     }
 }

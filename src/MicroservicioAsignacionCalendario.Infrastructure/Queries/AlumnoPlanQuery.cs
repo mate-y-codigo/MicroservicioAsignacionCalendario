@@ -12,10 +12,10 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Queries
         {
             _context = context;
         }
-        public async Task<AlumnoPlan> ObtenerAlumnoPlan(Guid id)
+        public async Task<AlumnoPlan> ObtenerAlumnoPlan(Guid idAlumno)
         {
             return await _context.AlumnoPlan
-                .FirstOrDefaultAsync(ap => ap.IdAlumno == id && ap.Estado == EstadoAlumnoPlan.Activo || ap.IdAlumno == id && ap.Estado == EstadoAlumnoPlan.Activo);
+                .FirstOrDefaultAsync(ap => ap.IdAlumno == idAlumno && ap.Estado == EstadoAlumnoPlan.Activo);
         }
     }
 }
