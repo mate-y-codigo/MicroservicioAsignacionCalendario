@@ -7,8 +7,7 @@ namespace Application.Interfaces.EventoCalendario
 {
     public interface IEventoCalendarioService
     {
-        Task CrearEventosDePlanAsync(MicroservicioAsignacionCalendario.Domain.Entities.AlumnoPlan alumnoPlan, PlanEntrenamientoResponse plan);
-
+        Task<List<EventoCalendarioResponse>> ObtenerEventosAsync(EventoCalendarioFilterRequest filtros);
         Task CrearEventosDePlanAsync(AlumnoPlan alumnoPlan, PlanEntrenamientoResponse plan);
     }
 }
