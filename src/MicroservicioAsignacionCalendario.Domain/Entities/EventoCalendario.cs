@@ -5,6 +5,7 @@
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid IdAlumno { get; set; }
         public Guid IdEntrenador { get; set; }
+        public Guid IdAlumnoPlan { get; set; }
         public Guid IdSesionEntrenamiento { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime? FechaFin { get; set; }
