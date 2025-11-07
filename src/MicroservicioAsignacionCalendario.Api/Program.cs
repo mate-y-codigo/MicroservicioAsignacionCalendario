@@ -17,6 +17,7 @@ using MicroservicioAsignacionCalendario.Infrastructure.Queries;
 using Microsoft.EntityFrameworkCore;
 using MicroservicioAsignacionCalendario.Application.Mapper;
 using AutoMapper;
+using MicroservicioAsignacionCalendario.Infrastructure.Persistence.Commands;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,8 @@ builder.Services.AddScoped<IAlumnoPlanService, AlumnoPlanService>();
 builder.Services.AddScoped<IEjercicioRegistroService, EjercicioRegistroService>();
 builder.Services.AddScoped<IEventoCalendarioService, EventoCalendarioService>();
 builder.Services.AddScoped<IRecordPersonalService, RecordPersonalService>();
+builder.Services.AddScoped<IEventoCalendarioCommand, EventoCalendarioCommand>();
+
 
 // Set HttpClients
 builder.Services.AddHttpClient<IPlanEntrenamientoClient, PlanEntrenamientoClient>();

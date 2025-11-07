@@ -9,6 +9,7 @@ using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
 using MicroservicioAsignacionCalendario.Domain.Entities;
 using Application.DTOs.AlumnoPlan;
 using AutoMapper;
+using Application.Interfaces.EventoCalendario;
 
 namespace Application.Services
 {
@@ -19,13 +20,17 @@ namespace Application.Services
         private readonly IUsuariosClient _usuariosClient;
         private readonly IAlumnoPlanCommand _command;
         private readonly IAlumnoPlanQuery _query;
-        public AlumnoPlanService(IMapper mapper, IAlumnoPlanCommand command, IAlumnoPlanQuery query, IUsuariosClient usuariosClient, IPlanEntrenamientoClient planEntrenamientoClient)
+        private readonly IEventoCalendarioService _eventoCalendarioService;
+
+
+        public AlumnoPlanService(IMapper mapper, IAlumnoPlanCommand command, IAlumnoPlanQuery query, IUsuariosClient usuariosClient, IPlanEntrenamientoClient planEntrenamientoClient, IEventoCalendarioService eventoCalendarioService)
         {
             _mapper = mapper;
             _planEntrenamientoClient = planEntrenamientoClient;
             _usuariosClient = usuariosClient;
             _command = command;
             _query = query;
+            _eventoCalendarioService = eventoCalendarioService;
         }
 
         public async Task<AlumnoPlanResponse> AsignarPlanAsync(AlumnoPlanRequest req)
@@ -62,6 +67,8 @@ namespace Application.Services
             alumnoPlan.IdSesionActual = primerSesionEntrenamiento.Id;
 
             await _command.InsertarAlumnoPlan(alumnoPlan);
+
+            await _eventoCalendarioService.CrearEventosDePlanAsync(alumnoPlan, plan);
 
             return _mapper.Map<AlumnoPlanResponse>(alumnoPlan);
         }

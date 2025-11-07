@@ -1,6 +1,7 @@
 ﻿using MicroservicioAsignacionCalendario.Domain.Entities;
+namespace MicroservicioAsignacionCalendario.Application.DTOs.EventoCalendario
 
-namespace Application.DTOs.EventoCalendario
+
 {
     public class EventoCalendarioResponse
     {
