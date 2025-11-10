@@ -1,4 +1,5 @@
-﻿using MicroservicioAsignacionCalendario.Domain.Entities;
+﻿using MicroservicioAsignacionCalendario.Application.DTOs.SesionRealizada;
+using MicroservicioAsignacionCalendario.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace Application.Interfaces.Query
     public interface ISesionRealizadaQuery
     {
         Task<SesionRealizada> ObtenerSesionRealizadaPorId(Guid id);
+        Task<List<SesionRealizada>> ObtenerSesionesRealizadas(SesionRealizadaFilterRequest filtros);
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Interfaces.Command;
 using Application.Interfaces.EventoCalendario;
+using MicroservicioAsignacionCalendario.Application.DTOs.EventoCalendario;
 using MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento;
 using MicroservicioAsignacionCalendario.Domain.Entities;
 
@@ -18,8 +19,8 @@ namespace Application.Services
             _eventoCommand = eventoCommand;
         }
 
-        public async Task<List<MicroservicioAsignacionCalendario.Application.DTOs.EventoCalendario.EventoCalendarioResponse>>
-            ObtenerEventosAsync(MicroservicioAsignacionCalendario.Application.DTOs.EventoCalendario.EventoCalendarioFilterRequest filtros)
+        public async Task<List<EventoCalendarioResponse>>
+            ObtenerEventosAsync(EventoCalendarioFilterRequest filtros)
         {
             throw new NotImplementedException();
         }

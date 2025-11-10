@@ -9,6 +9,6 @@ namespace Application.Interfaces.Command
 {
     public interface ISesionRealizadaCommand
     {
-        Task InsertarSesionRealizadaCompleta(SesionRealizada sesion, List<EjercicioRegistro> ejercicios);
+        Task InsertarSesionRealizadaCompleta(SesionRealizada sesion, List<EjercicioRegistro> ejercicios, Guid idAlumno);
     }
 }

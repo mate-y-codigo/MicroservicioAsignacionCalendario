@@ -2,6 +2,7 @@
 using AutoMapper;
 using MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan;
 using MicroservicioAsignacionCalendario.Application.DTOs.EjercicioRegistro;
+using MicroservicioAsignacionCalendario.Application.DTOs.RecordPersonal;
 using MicroservicioAsignacionCalendario.Application.DTOs.SesionRealizada;
 using MicroservicioAsignacionCalendario.Domain.Entities;
 using System;
@@ -38,7 +39,10 @@ namespace MicroservicioAsignacionCalendario.Application.Mapper
                 .ForMember(dest => dest.IdSesionRealizada, opt => opt.Ignore())
                 .ForMember(dest => dest.PesoObjetivo, opt => opt.Ignore())
                 .ForMember(dest => dest.RepeticionesObjetivo, opt => opt.Ignore())
-                .ForMember(dest => dest.SeriesObjetivo, opt => opt.Ignore());
+                .ForMember(dest => dest.SeriesObjetivo, opt => opt.Ignore())
+                .ForMember(dest => dest.NombreEjercicio, opt => opt.Ignore());
+                //.ForMember(dest => dest.CategoriaEjercicio, opt => opt.Ignore())
+                //.ForMember(dest => dest.MusculoEjercicio, opt => opt.Ignore());
             CreateMap<EjercicioRegistro, EjercicioRegistroResponse>();
 
             // SesionRealizada
@@ -47,6 +51,12 @@ namespace MicroservicioAsignacionCalendario.Application.Mapper
                 .ForMember(dest => dest.Estado, opt => opt.Ignore())
                 .ForMember(dest => dest.EjerciciosRegistrados, opt => opt.Ignore());
             CreateMap<SesionRealizada, SesionRealizadaResponse>();
+            CreateMap<SesionRealizada, SesionRealizadaListResponse>()
+                .ForMember(dest => dest.NombrePlan, opt => opt.Ignore())
+                .ForMember(dest => dest.NombreSesion, opt => opt.Ignore());
+
+            // RecordPersonal
+            CreateMap<RecordPersonal, RecordPersonalResponse>();
         }
     }
 }

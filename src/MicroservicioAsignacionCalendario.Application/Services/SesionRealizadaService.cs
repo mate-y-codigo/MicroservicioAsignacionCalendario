@@ -64,12 +64,47 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 nuevoEjercicioRegistro.PesoObjetivo = (decimal)ejercicioPlanificado.PesoObjetivo;
                 nuevoEjercicioRegistro.RepeticionesObjetivo = ejercicioPlanificado.RepeticionesObjetivo;
                 nuevoEjercicioRegistro.SeriesObjetivo = ejercicioPlanificado.SeriesObjetivo;
+                nuevoEjercicioRegistro.NombreEjercicio = ejercicioPlanificado.NombreEjercicio;
                 ejerciciosARegistrar.Add(nuevoEjercicioRegistro);
             }
 
-            await _command.InsertarSesionRealizadaCompleta(sesionRealizada, ejerciciosARegistrar);
+            await _command.InsertarSesionRealizadaCompleta(sesionRealizada, ejerciciosARegistrar, alumno.Id);
             sesionRealizada.EjerciciosRegistrados = ejerciciosARegistrar;
             return _mapper.Map<SesionRealizadaResponse>(sesionRealizada);
+        }
+        
+        public async Task<List<SesionRealizadaListResponse>> ObtenerSesionesRealizadas(SesionRealizadaFilterRequest filtros)
+        {
+            var alumno = await _usuariosClient.ObtenerUsuario(filtros.IdAlumno);
+            if (alumno == null)
+                throw new NotFoundException($"El alumno con Id {filtros.IdAlumno} no existe.");
+
+            var planEntrenamiento = await _planEntrenamientoClient.ObtenerPlanEntrenamiento(filtros.IdPlanEntrenamiento);
+            if (planEntrenamiento == null)
+                throw new NotFoundException($"El plan de entrenamiento con Id {filtros.IdPlanEntrenamiento} no existe.");
+
+            if (filtros.Desde.HasValue && filtros.Hasta.HasValue && filtros.Desde.Value > filtros.Hasta.Value)
+                throw new BadRequestException("Rango de fechas inválido");
+
+            var sesiones = await _query.ObtenerSesionesRealizadas(filtros);
+            if (sesiones == null || !sesiones.Any())
+                return new List<SesionRealizadaListResponse>();
+
+            var result = _mapper.Map<List<SesionRealizadaListResponse>>(sesiones);
+            var nombrePlan = planEntrenamiento.Nombre;
+            var sesionesDict = planEntrenamiento.SesionesEntrenamiento.ToDictionary(s => s.Id);
+
+            foreach (var sesionDto in result)
+            {
+                sesionDto.NombrePlan = nombrePlan;
+
+                if (sesionesDict.TryGetValue(sesionDto.IdSesionEntrenamiento, out var sesionInfo))
+                {
+                    sesionDto.NombreSesion = sesionInfo.Nombre;
+                }
+            }
+
+            return result;
         }
     }
 }

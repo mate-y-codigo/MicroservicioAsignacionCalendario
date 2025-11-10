@@ -17,6 +17,9 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.Property(er => er.RepeticionesObjetivo).HasColumnType("int").IsRequired();
             builder.Property(er => er.Peso).HasColumnType("decimal(10,2)").IsRequired();
             builder.Property(er => er.PesoObjetivo).HasColumnType("decimal(10,2)").IsRequired();
+            builder.Property(er => er.NombreEjercicio).IsRequired();
+            //builder.Property(er => er.CategoriaEjercicio).IsRequired();
+            //builder.Property(er => er.MusculoEjercicio).IsRequired();
 
             builder.HasOne<SesionRealizada>(er => er.SesionRealizada)
                 .WithMany(sr => sr.EjerciciosRegistrados)

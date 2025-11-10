@@ -10,5 +10,6 @@ namespace MicroservicioAsignacionCalendario.Application.Interfaces.SesionRealiza
     public interface ISesionRealizadaService
     {
         Task<SesionRealizadaResponse> InsertarSesionRealizada(SesionRealizadaRequest req);
+        Task<List<SesionRealizadaListResponse>> ObtenerSesionesRealizadas(SesionRealizadaFilterRequest req);
     }
 }

@@ -7,6 +7,9 @@ namespace MicroservicioAsignacionCalendario.Domain.Entities
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid IdSesionRealizada { get; set; }
         public Guid IdEjercicio { get; set; }
+        public string NombreEjercicio { get; set; }
+        //public string CategoriaEjercicio { get; set; }
+        //public string MusculoEjercicio { get; set; }
         public int Series { get; set; }
         public int SeriesObjetivo { get; set; }
         public int Repeticiones { get; set; }

@@ -5,6 +5,9 @@
         public Guid Id { get; set; }
         public Guid IdAlumno { get; set; }
         public Guid IdEjercicio { get; set; }
+        public string NombreEjercicio { get; set; }
+        public string CategoriaEjercicio { get; set; }
+        public string MusculoEjercicio { get; set; }
         public decimal PesoMax { get; set; }
         public int Series { get; set; }
         public int Repeticiones { get; set; }

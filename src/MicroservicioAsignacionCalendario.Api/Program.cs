@@ -59,6 +59,7 @@ builder.Services.AddScoped<IEjercicioRegistroQuery, EjercicioRegistroQuery>();
 builder.Services.AddScoped<ISesionRealizadaCommand, SesionRealizadaCommand>();
 builder.Services.AddScoped<ISesionRealizadaQuery, SesionesRealizadasQuery>();
 builder.Services.AddScoped<IEventoCalendarioCommand, EventoCalendarioCommand>();
+builder.Services.AddScoped<IRecordPersonalQuery, RecordPersonalQuery>();
 
 // Set Mapper
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());

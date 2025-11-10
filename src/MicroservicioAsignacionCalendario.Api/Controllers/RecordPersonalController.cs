@@ -16,14 +16,20 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
             _service = service;
         }
 
-        [HttpGet("{alumno_id}")]
+        [HttpGet]
         [ProducesResponseType(typeof(List<RecordPersonalResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
-        // TO DO: Agregar filtros por fecha, sesionEntrenamiento, ejercicio??
-        public async Task<IActionResult> ObtenerRecordsPersonales([FromRoute] Guid alumno_id)
+        public async Task<IActionResult> ObtenerRecordsPersonales([FromBody] RecordPersonalFilterRequest filtros)
         {
-            var result = await _service.ObtenerRecordsPersonalesAsync(alumno_id);
-            return Ok(result);
+            try
+            {
+                var result = await _service.ObtenerRecordsPersonalesAsync(filtros);
+                return Ok(result);
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new ApiError { Message = ex.Message });
+            }
         }
     }
 }

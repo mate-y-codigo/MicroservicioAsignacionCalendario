@@ -17,6 +17,9 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.Property(rp => rp.PesoMax).IsRequired().HasColumnType("decimal(10,2)");
             builder.Property(rp => rp.Series).IsRequired().HasColumnType("int");
             builder.Property(rp => rp.Repeticiones).IsRequired().HasColumnType("int");
+            builder.Property(er => er.NombreEjercicio).IsRequired();
+            //builder.Property(er => er.CategoriaEjercicio).IsRequired();
+            //builder.Property(er => er.MusculoEjercicio).IsRequired();
             builder.Property(rp => rp.FechaRegistro)
                 .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
