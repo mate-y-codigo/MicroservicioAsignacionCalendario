@@ -19,7 +19,7 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<RecordPersonalResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ObtenerRecordsPersonales([FromBody] RecordPersonalFilterRequest filtros)
+        public async Task<IActionResult> ObtenerRecordsPersonales([FromQuery] RecordPersonalFilterRequest filtros)
         {
             try
             {
@@ -29,6 +29,11 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
             catch (BadRequestException ex)
             {
                 return BadRequest(new ApiError { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, new ApiError { Message = ex.Message });
             }
         }
     }

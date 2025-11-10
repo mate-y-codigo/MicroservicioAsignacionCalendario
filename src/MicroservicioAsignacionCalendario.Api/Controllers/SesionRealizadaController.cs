@@ -36,5 +36,26 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
                 return StatusCode(500, new ApiError { Message = "Error interno del servidor." });
             }
         }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<SesionRealizadaResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ObtenerSesionesRealizadas([FromQuery] SesionRealizadaFilterRequest filtros)
+        {
+            try
+            {
+                var result = await _service.ObtenerSesionesRealizadas(filtros);
+                return Ok(result);
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(new ApiError { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, new ApiError { Message = "Error interno del servidor." });
+            }
+        }
     }
 }
