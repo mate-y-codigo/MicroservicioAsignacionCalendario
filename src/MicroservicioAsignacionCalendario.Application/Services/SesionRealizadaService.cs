@@ -36,11 +36,11 @@ namespace MicroservicioAsignacionCalendario.Application.Services
         public async Task<SesionRealizadaResponse> InsertarSesionRealizada(SesionRealizadaRequest req)
         {
             // TO DO: IdAlumno debe venir desde authentication
-            var alumno = await _usuariosClient.ObtenerUsuario(req.IdAlumno);
-            if (alumno == null)
-                throw new NotFoundException("El alumno no existe");
+            //var alumno = await _usuariosClient.ObtenerUsuario(req.IdAlumno);
+            //if (alumno == null)
+            //    throw new NotFoundException("El alumno no existe");
 
-            var alumnoPlan = await _alumnoPlanQuery.ObtenerAlumnoPlan(alumno.Id);
+            var alumnoPlan = await _alumnoPlanQuery.ObtenerAlumnoPlan(req.IdAlumno);
             if (alumnoPlan == null)
                 throw new NotFoundException("El alumno no tiene un plan activo");
 
@@ -68,16 +68,16 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 ejerciciosARegistrar.Add(nuevoEjercicioRegistro);
             }
 
-            await _command.InsertarSesionRealizadaCompleta(sesionRealizada, ejerciciosARegistrar, alumno.Id);
+            await _command.InsertarSesionRealizadaCompleta(sesionRealizada, ejerciciosARegistrar, req.IdAlumno);
             sesionRealizada.EjerciciosRegistrados = ejerciciosARegistrar;
             return _mapper.Map<SesionRealizadaResponse>(sesionRealizada);
         }
         
         public async Task<List<SesionRealizadaListResponse>> ObtenerSesionesRealizadas(SesionRealizadaFilterRequest filtros)
         {
-            var alumno = await _usuariosClient.ObtenerUsuario(filtros.IdAlumno);
-            if (alumno == null)
-                throw new NotFoundException($"El alumno con Id {filtros.IdAlumno} no existe.");
+            //var alumno = await _usuariosClient.ObtenerUsuario(filtros.IdAlumno);
+            //if (alumno == null)
+            //    throw new NotFoundException($"El alumno con Id {filtros.IdAlumno} no existe.");
 
             var planEntrenamiento = await _planEntrenamientoClient.ObtenerPlanEntrenamiento(filtros.IdPlanEntrenamiento);
             if (planEntrenamiento == null)

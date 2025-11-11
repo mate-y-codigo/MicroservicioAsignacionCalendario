@@ -30,6 +30,10 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
             {
                 return BadRequest(new ApiError { Message = ex.Message });
             }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ApiError { Message = ex.Message });
+            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);

@@ -35,18 +35,18 @@ namespace Application.Services
 
         public async Task<AlumnoPlanResponse> AsignarPlanAsync(AlumnoPlanRequest req)
         {
-            Task<UsuarioResponse> usuarioTask = _usuariosClient.ObtenerUsuario(req.IdAlumno);
-            Task<PlanEntrenamientoResponse> planTask = _planEntrenamientoClient.ObtenerPlanEntrenamiento(req.IdPlanEntrenamiento);
-            await Task.WhenAll(usuarioTask, planTask);
+            //Task<UsuarioResponse> usuarioTask = _usuariosClient.ObtenerUsuario(req.IdAlumno);
+            //Task<PlanEntrenamientoResponse> planTask = _planEntrenamientoClient.ObtenerPlanEntrenamiento(req.IdPlanEntrenamiento);
+            //await Task.WhenAll(usuarioTask, planTask);
 
-            UsuarioResponse usuario = await usuarioTask;
-            PlanEntrenamientoResponse plan = await planTask;
+            //UsuarioResponse usuario = await usuarioTask;
+            //PlanEntrenamientoResponse plan = await planTask;
 
-            if (usuario == null)
-                throw new BadRequestException("El alumno no existe.");
+            //if (usuario == null)
+            //    throw new BadRequestException("El alumno no existe.");
 
             // TO DO: Validar que el usuario sea un alumno (rol)
-
+            var plan = await _planEntrenamientoClient.ObtenerPlanEntrenamiento(req.IdPlanEntrenamiento);
             if (plan == null)
                 throw new BadRequestException("El plan de entrenamiento no existe.");
 
