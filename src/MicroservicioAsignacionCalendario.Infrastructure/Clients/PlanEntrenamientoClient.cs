@@ -41,9 +41,11 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Clients
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<SesionEntrenamientoResponse>(
+                var result = await _httpClient.GetFromJsonAsync<SesionEntrenamientoResponse>(
                     $"{_urlBase}/api/TrainingSession/{id}",
                    ct);
+                Console.WriteLine(result);
+                return result;
             }
             catch (HttpRequestException ex)
             {

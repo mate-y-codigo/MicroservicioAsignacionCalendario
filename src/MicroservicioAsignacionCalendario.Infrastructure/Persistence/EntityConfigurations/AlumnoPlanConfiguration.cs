@@ -11,20 +11,33 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.ToTable("AlumnoPlan");
 
             builder.HasKey(ap => ap.Id);
-            builder.Property(ap => ap.Estado).HasDefaultValue(EstadoAlumnoPlan.Activo);
-            builder.Property(ap => ap.Notas).HasColumnType("text");
-            builder.Property(ap => ap.IntervaloDiasDescanso).HasColumnType("int").IsRequired();
-            builder.Property(ap => ap.FechaInicio)
-                .HasColumnType("timestamp with time zone")
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .IsRequired();
-            builder.Property(ap => ap.FechaFin)
-                .HasColumnType("timestamp with time zone")
-                .HasDefaultValueSql("NOW() + INTERVAL '2 weeks'");
 
+            // Referencias
             builder.Property(ap => ap.IdAlumno).HasColumnType("uuid").IsRequired();
             builder.Property(ap => ap.IdPlanEntrenamiento).HasColumnType("uuid").IsRequired();
-            builder.Property(ap => ap.IdSesionActual).HasColumnType("uuid").IsRequired();
+            builder.Property(ap => ap.IdSesionARealizar).HasColumnType("uuid").IsRequired();
+
+            // Snapshot: Plan de Entrenamiento
+            builder.Property(ap => ap.NombrePlan).HasMaxLength(100).IsRequired();
+            builder.Property(ap => ap.DescripcionPlan).HasColumnType("text").IsRequired(false);
+
+            // Otros
+            builder.Property(ap => ap.Estado).HasConversion<string>();
+            builder.Property(ap => ap.Notas).HasColumnType("text").IsRequired(false);
+            builder.Property(ap => ap.IntervaloDiasDescanso).HasColumnType("int").IsRequired();
+            builder.Property(ap => ap.FechaInicio).IsRequired();
+            builder.Property(ap => ap.FechaFin).IsRequired();
+
+            // Relaciones
+            builder.HasMany(ap => ap.SesionesRealizadas)
+                  .WithOne(sr => sr.AlumnoPlan)
+                  .HasForeignKey(sr => sr.IdAlumnoPlan)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(ap => ap.EventosCalendarios)
+                  .WithOne(ec => ec.AlumnoPlan)
+                  .HasForeignKey(ec => ec.IdAlumnoPlan)
+                  .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

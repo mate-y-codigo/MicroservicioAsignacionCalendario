@@ -11,19 +11,25 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.ToTable("RecordPersonal");
 
             builder.HasKey(rp => rp.Id);
-            builder.Property(rp => rp.Id).HasColumnType("uuid");
-            builder.Property(rp => rp.IdAlumno).IsRequired().HasColumnType("uuid");
-            builder.Property(rp => rp.IdEjercicio).IsRequired().HasColumnType("uuid");
-            builder.Property(rp => rp.PesoMax).IsRequired().HasColumnType("decimal(10,2)");
+
+            // Referencias
+            builder.Property(rp => rp.IdAlumno).HasColumnType("uuid").IsRequired();
+            builder.Property(rp => rp.IdEjercicio).HasColumnType("uuid").IsRequired();
+            
+            // Snapshot: Ejercicio
+            builder.Property(er => er.NombreEjercicio).HasMaxLength(100).IsRequired();
+            builder.Property(er => er.NombreGrupoMuscular).HasMaxLength(50).IsRequired();
+            
+            // Otros
+            builder.Property(rp => rp.PesoMax).HasPrecision(6, 2).IsRequired();
             builder.Property(rp => rp.Series).IsRequired().HasColumnType("int");
             builder.Property(rp => rp.Repeticiones).IsRequired().HasColumnType("int");
-            builder.Property(er => er.NombreEjercicio).IsRequired();
-            //builder.Property(er => er.CategoriaEjercicio).IsRequired();
-            //builder.Property(er => er.MusculoEjercicio).IsRequired();
-            builder.Property(rp => rp.FechaRegistro)
-                .HasColumnType("timestamp with time zone")
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .IsRequired();
+            builder.Property(rp => rp.FechaRegistro).IsRequired();
+            builder.Property(rp => rp.Calculo1RM).HasPrecision(6, 2).IsRequired();
+
+            // Indice para rendimiento
+            builder.HasIndex(rp => new { rp.IdAlumno, rp.IdEjercicio })
+                  .IsUnique();
         }
     }
 }

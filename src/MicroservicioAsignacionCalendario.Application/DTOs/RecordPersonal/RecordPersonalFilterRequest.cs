@@ -9,14 +9,14 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.RecordPersonal
 {
     public class RecordPersonalFilterRequest
     {
-        [Required]
-        public Guid IdAlumno { get; set; }
+        public Guid? IdAlumno { get; set; }
         public Guid? IdEjercicio { get; set; }
-        public decimal? PesoMinimo { get; set; }
-        public int? RepeticionesMinimas { get; set; }
+        public string? NombreGrupoMuscular { get; set; }
         public DateTime? Desde { get; set; }
         public DateTime? Hasta{ get; set; }
         public string? OrdenarPor { get; set; } = "FechaRegistro";
         public string? Orden { get; set; } = "desc";
+        public int Pagina { get; set; } = 1;
+        public int CantidadPorPagina { get; set; } = 25;
     }
 }

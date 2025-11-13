@@ -11,19 +11,27 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.ToTable("SesionRealizada");
 
             builder.HasKey(sr => sr.Id);
-            builder.Property(sr => sr.Id).HasColumnType("uuid");
-            builder.Property(sr => sr.IdSesionEntrenamiento).IsRequired().HasColumnType("uuid");
-            builder.Property(sr => sr.IdPlanAlumno).IsRequired().HasColumnType("uuid");
-            builder.Property(sr => sr.Estado).IsRequired().HasColumnType("int").HasDefaultValue(EstadoSesion.Pendiente);
-            builder.Property(sr => sr.FechaRealizacion)
-                .HasColumnType("timestamp with time zone")
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .IsRequired();
 
-            builder.HasOne(sr => sr.AlumnoPlan)
-            .WithMany(ap => ap.SesionesRealizadas)
-            .HasForeignKey(sr => sr.IdPlanAlumno)
-            .OnDelete(DeleteBehavior.Restrict);
+            // Referencias
+            builder.Property(sr => sr.IdSesionEntrenamiento).HasColumnType("uuid").IsRequired();
+            builder.Property(sr => sr.IdAlumnoPlan).HasColumnType("uuid").IsRequired();
+            
+            // Snapshot: Sesion entrenamiento
+            builder.Property(sr => sr.NombreSesion).HasMaxLength(100).IsRequired();
+            builder.Property(sr => sr.OrdenSesion).HasColumnType("int").IsRequired();
+
+            // Snapshot: Alumno
+            builder.Property(sr => sr.PesoCorporalAlumno).HasPrecision(5, 2);
+            builder.Property(sr => sr.AlturaEnCmAlumno).HasPrecision(5, 2);
+
+            // Otros
+            builder.Property(sr => sr.Estado).HasConversion<string>();
+            builder.Property(sr => sr.FechaRealizacion).IsRequired();
+
+            builder.HasMany(e => e.EjerciciosRegistrados)
+              .WithOne(er => er.SesionRealizada)
+              .HasForeignKey(er => er.IdSesionRealizada)
+              .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

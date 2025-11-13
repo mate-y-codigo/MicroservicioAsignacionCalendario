@@ -49,7 +49,7 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 throw new NotFoundException("La sesión de entrenamiento no existe");
 
             var sesionRealizada = _mapper.Map<SesionRealizada>(req);
-            sesionRealizada.IdPlanAlumno = alumnoPlan.Id;
+            sesionRealizada.IdAlumnoPlan = alumnoPlan.Id;
             sesionRealizada.Estado = EstadoSesion.Completado;
 
             var ejerciciosARegistrar = new List<EjercicioRegistro>();
@@ -64,7 +64,7 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 nuevoEjercicioRegistro.PesoObjetivo = (decimal)ejercicioPlanificado.PesoObjetivo;
                 nuevoEjercicioRegistro.RepeticionesObjetivo = ejercicioPlanificado.RepeticionesObjetivo;
                 nuevoEjercicioRegistro.SeriesObjetivo = ejercicioPlanificado.SeriesObjetivo;
-                nuevoEjercicioRegistro.NombreEjercicio = ejercicioPlanificado.NombreEjercicio;
+                //nuevoEjercicioRegistro.NombreEjercicio = ejercicioPlanificado.NombreEjercicio;
                 ejerciciosARegistrar.Add(nuevoEjercicioRegistro);
             }
 

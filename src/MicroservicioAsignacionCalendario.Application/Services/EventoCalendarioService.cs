@@ -43,12 +43,12 @@ namespace Application.Services
                 var evento = new EventoCalendario
                 {
                     Id = Guid.NewGuid(),
-                    IdAlumno = alumnoPlan.IdAlumno,
-                    IdEntrenador = plan.IdEntrenador,
+                    //IdAlumno = alumnoPlan.IdAlumno,
+                    //IdEntrenador = plan.IdEntrenador,
                     IdSesionEntrenamiento = sesion.Id,
                     IdAlumnoPlan = alumnoPlan.Id,
-                    FechaInicio = fecha,
-                    FechaFin = fecha.AddHours(1),
+                    //FechaInicio = fecha,
+                    //FechaFin = fecha.AddHours(1),
                     Estado = EstadoEvento.Programado,
                     Notas = $"Sesión {sesion.Orden} - {plan.Nombre}"
                 };

@@ -18,6 +18,8 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.SesionRealizada
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime FechaRealizacion { get; set; }
+        public decimal? PesoCorporalAlumno { get; set; }
+        public decimal? AlturaEnCmAlumno { get; set; }
         [Required]
         public List<EjercicioRegistroRequest> RegistroEjercicios { get; set; }
     }

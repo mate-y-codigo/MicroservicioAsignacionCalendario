@@ -64,7 +64,7 @@ namespace Application.Services
                 throw new ConflictException("El alumno ya tiene un plan de entrenamiento asignado.");
 
             var alumnoPlan = _mapper.Map<AlumnoPlan>(req);
-            alumnoPlan.IdSesionActual = primerSesionEntrenamiento.Id;
+            alumnoPlan.IdSesionARealizar = primerSesionEntrenamiento.Id;
 
             await _command.InsertarAlumnoPlan(alumnoPlan);
 

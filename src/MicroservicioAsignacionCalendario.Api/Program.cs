@@ -61,7 +61,7 @@ builder.Services.AddScoped<IRecordPersonalQuery, RecordPersonalQuery>();
 
 // Set Mapper
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
-
+builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

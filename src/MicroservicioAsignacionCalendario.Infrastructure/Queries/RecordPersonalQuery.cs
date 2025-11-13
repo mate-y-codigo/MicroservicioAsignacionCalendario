@@ -29,10 +29,10 @@ namespace Infrastructure.Queries
             
             if (filtros.IdEjercicio.HasValue)
                 query = query.Where(r => r.IdEjercicio == filtros.IdEjercicio);
-            if (filtros.PesoMinimo.HasValue)
-                query = query.Where(r => r.PesoMax >= filtros.PesoMinimo);
-            if (filtros.RepeticionesMinimas.HasValue)
-                query = query.Where(r => r.Repeticiones >= filtros.RepeticionesMinimas);
+            //if (filtros.PesoMinimo.HasValue)
+            //    query = query.Where(r => r.PesoMax >= filtros.PesoMinimo);
+            //if (filtros.RepeticionesMinimas.HasValue)
+            //    query = query.Where(r => r.Repeticiones >= filtros.RepeticionesMinimas);
             if (filtros.Desde.HasValue)
                 query = query.Where(r => r.FechaRegistro.Date >= filtros.Desde);
             if (filtros.Hasta.HasValue)
