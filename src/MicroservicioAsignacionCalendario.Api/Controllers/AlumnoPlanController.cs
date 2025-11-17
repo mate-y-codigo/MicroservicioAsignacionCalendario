@@ -2,6 +2,7 @@
 using MicroservicioAsignacionCalendario.Application.CustomExceptions;
 using MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan;
 using MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroservicioAsignacionCalendario.Api.Controllers
@@ -20,6 +21,7 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(AlumnoPlanResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = "Entrenador, Admin")]
         public async Task<IActionResult> AsignarPlan([FromBody] AlumnoPlanRequest request)
         {
             try

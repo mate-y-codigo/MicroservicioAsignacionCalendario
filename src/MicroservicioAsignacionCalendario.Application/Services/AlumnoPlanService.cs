@@ -35,27 +35,22 @@ namespace Application.Services
 
         public async Task<AlumnoPlanResponse> AsignarPlanAsync(AlumnoPlanRequest req)
         {
-            //Task<UsuarioResponse> usuarioTask = _usuariosClient.ObtenerUsuario(req.IdAlumno);
-            //Task<PlanEntrenamientoResponse> planTask = _planEntrenamientoClient.ObtenerPlanEntrenamiento(req.IdPlanEntrenamiento);
-            //await Task.WhenAll(usuarioTask, planTask);
+            var usuario = await _usuariosClient.ObtenerUsuario(req.IdAlumno);
+            if (usuario == null)
+                throw new BadRequestException("El alumno no existe.");
 
-            //UsuarioResponse usuario = await usuarioTask;
-            //PlanEntrenamientoResponse plan = await planTask;
+            if (usuario.Rol != "Alumno")
+                throw new BadRequestException("El ID proporcionado no corresponde a un Alumno.");
 
-            //if (usuario == null)
-            //    throw new BadRequestException("El alumno no existe.");
-
-            // TO DO: Validar que el usuario sea un alumno (rol)
             var plan = await _planEntrenamientoClient.ObtenerPlanEntrenamiento(req.IdPlanEntrenamiento);
             if (plan == null)
                 throw new BadRequestException("El plan de entrenamiento no existe.");
 
-            if (req.FechaInicio > req.FechaFin || req.FechaInicio < DateTime.UtcNow)
-                throw new BadRequestException("Rango de fechas inválido");
+            if (req.FechaInicio > req.FechaFin || req.FechaInicio.Date < DateTime.Today)
+                throw new BadRequestException("Rango de fechas inválido. La fecha de inicio no puede ser en el pasado.");
 
             var primerSesionEntrenamiento = plan.SesionesEntrenamiento
-                .SingleOrDefault(s => s.Orden == 1);
-
+                .FirstOrDefault(s => s.Orden == 1);
             if (primerSesionEntrenamiento == null)
                 throw new BadRequestException("El plan de entrenamiento no tiene sesiones definidas o está corrupto.");
 
@@ -64,11 +59,15 @@ namespace Application.Services
                 throw new ConflictException("El alumno ya tiene un plan de entrenamiento asignado.");
 
             var alumnoPlan = _mapper.Map<AlumnoPlan>(req);
+            alumnoPlan.NombrePlan = plan.Nombre;
+            alumnoPlan.DescripcionPlan = plan.Descripcion;
             alumnoPlan.IdSesionARealizar = primerSesionEntrenamiento.Id;
+            alumnoPlan.Estado = EstadoAlumnoPlan.Activo;
 
             await _command.InsertarAlumnoPlan(alumnoPlan);
 
-            await _eventoCalendarioService.CrearEventosDePlanAsync(alumnoPlan, plan);
+            // TO DO: Crear un evento Calendario..
+           /* await _eventoCalendarioService.CrearEventosDePlanAsync(alumnoPlan, plan)*/;
 
             return _mapper.Map<AlumnoPlanResponse>(alumnoPlan);
         }
