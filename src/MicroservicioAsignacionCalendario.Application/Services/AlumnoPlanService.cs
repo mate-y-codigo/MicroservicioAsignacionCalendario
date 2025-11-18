@@ -33,8 +33,9 @@ namespace Application.Services
             _eventoCalendarioService = eventoCalendarioService;
         }
 
-        public async Task<AlumnoPlanResponse> AsignarPlanAsync(AlumnoPlanRequest req)
+        public async Task<AlumnoPlanResponse> AsignarPlanAsync(string token, AlumnoPlanRequest req)
         {
+            _usuariosClient.SetAuthToken(token);
             var usuario = await _usuariosClient.ObtenerUsuario(req.IdAlumno);
             if (usuario == null)
                 throw new BadRequestException("El alumno no existe.");
