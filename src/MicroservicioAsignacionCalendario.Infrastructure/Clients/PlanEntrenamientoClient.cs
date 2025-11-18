@@ -41,9 +41,11 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Clients
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<SesionEntrenamientoResponse>(
-                    $"{_urlBase}/api/TrainningSession/{id}",
+                var result = await _httpClient.GetFromJsonAsync<SesionEntrenamientoResponse>(
+                    $"{_urlBase}/api/TrainingSession/{id}",
                    ct);
+                Console.WriteLine(result);
+                return result;
             }
             catch (HttpRequestException ex)
             {
@@ -51,5 +53,21 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Clients
                 return null;
             }
         }
+        public async Task<EjercicioResponse> ObtenerEjercicio(Guid idEjercicio, CancellationToken ct)
+        {
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<EjercicioResponse>(
+                    $"{_urlBase}/api/Exercise/{idEjercicio}",
+                   ct);
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error al obtener un ejercicio: {ex.Message}");
+                return null;
+            }
+        }
+
+
     }
 }

@@ -1,8 +1,12 @@
 ﻿using Application.DTOs.AlumnoPlan;
+using MicroservicioAsignacionCalendario.Api.Helpers;
 using MicroservicioAsignacionCalendario.Application.CustomExceptions;
 using MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan;
 using MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace MicroservicioAsignacionCalendario.Api.Controllers
 {
@@ -20,11 +24,15 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(AlumnoPlanResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AsignarPlan([FromBody] AlumnoPlanRequest request)
+        public async Task<IActionResult> AsignarPlan([FromHeader(Name = "Authorization")] string authorizationHeader, [FromBody] AlumnoPlanRequest request)
         {
+            var token = Request.ExtraerToken();
+            if (string.IsNullOrEmpty(token))
+                return Unauthorized(new ApiError { Message = "Token de autorización ausente o mal formado." });
+
             try
             {
-                var result = await _service.AsignarPlanAsync(request);
+                var result = await _service.AsignarPlanAsync(token, request);
                 return new JsonResult(result) { StatusCode = 201 };
             }
             catch (BadRequestException ex)

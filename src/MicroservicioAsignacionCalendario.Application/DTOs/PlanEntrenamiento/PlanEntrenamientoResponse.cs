@@ -22,6 +22,6 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento
         [Required]
         public bool Activo { get; set; }
         [Required]
-        public List<SesionEntrenamientoResponse> SesionesEntrenamiento { get; set; }
+        public List<SesionEntrenamientoConPlanResponse> SesionesEntrenamiento { get; set; }
     }
 }

@@ -2,15 +2,17 @@
 {
     public class EventoCalendario
     {
+        // Referencias
         public Guid Id { get; set; } = Guid.NewGuid();
-        public Guid IdAlumno { get; set; }
-        public Guid IdEntrenador { get; set; }
+        public Guid IdAlumnoPlan { get; set; }
         public Guid IdSesionEntrenamiento { get; set; }
-        public DateTime FechaInicio { get; set; }
-        public DateTime? FechaFin { get; set; }
+
+        // Otros
         public EstadoEvento Estado { get; set; } = EstadoEvento.Programado;
         public string? Notas { get; set; }
-        public DateTime FechaCreacion { get; set; }
-        public DateTime FechaActualizacion { get; set; }
+        public DateTime FechaProgramada { get; set; }
+
+        // Relaciones Base de datos
+        public virtual AlumnoPlan AlumnoPlan { get; set; } = null!;
     }
 }

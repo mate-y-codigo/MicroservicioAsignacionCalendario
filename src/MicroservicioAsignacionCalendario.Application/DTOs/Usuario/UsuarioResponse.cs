@@ -17,10 +17,13 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.Usuario
         public string Apellido { get; set; }
         [Required]
         public string Email { get; set; }
+        public string? Celular { get; set; }
         [Required]
-        public string Celular { get; set; }
+        public int RolId { get; set; }
         [Required]
-        public Guid RolId { get; set; }
+        public string Rol { get; set; }
+        public decimal? Peso { get; set; }
+        public decimal? Altura { get; set; }
         [Required]
         public DateTime CreadoEn { get; set; }
     }

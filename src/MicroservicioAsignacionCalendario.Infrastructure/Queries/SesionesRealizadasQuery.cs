@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Query;
+using MicroservicioAsignacionCalendario.Application.DTOs.SesionRealizada;
 using MicroservicioAsignacionCalendario.Domain.Entities;
 using MicroservicioAsignacionCalendario.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,26 @@ namespace Infrastructure.Queries
         public async Task<SesionRealizada> ObtenerSesionRealizadaPorId(Guid id)
         {
             return await _context.SesionRealizada.FirstOrDefaultAsync(sr => sr.Id == id);
+        }
+
+        public async Task<List<SesionRealizada>> ObtenerSesionesRealizadas(SesionRealizadaFilterRequest filtros)
+        {
+            var query = _context.SesionRealizada.AsNoTracking().AsQueryable();
+
+            query = query.Where(s => s.AlumnoPlan.IdAlumno == filtros.IdAlumno);
+            query = query.Where(s => s.AlumnoPlan.IdPlanEntrenamiento == filtros.IdPlanEntrenamiento);
+
+            if (filtros.IdSesionEntrenamiento.HasValue)
+                query = query.Where(s => s.IdSesionEntrenamiento == filtros.IdSesionEntrenamiento);
+
+            if (filtros.Desde.HasValue)
+                query = query.Where(s => s.FechaRealizacion.Date >= filtros.Desde);
+
+            if (filtros.Hasta.HasValue)
+                query = query.Where(s => s.FechaRealizacion.Date <= filtros.Hasta);
+
+            query = query.OrderByDescending(s => s.FechaRealizacion);
+            return await query.ToListAsync();
         }
     }
 }

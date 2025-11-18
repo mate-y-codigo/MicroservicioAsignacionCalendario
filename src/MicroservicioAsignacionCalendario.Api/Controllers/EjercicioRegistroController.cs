@@ -16,27 +16,6 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
             _service = service;
         }
 
-        [HttpPost]
-        [ProducesResponseType(typeof(EjercicioRegistroResponse), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> RegistrarEjercicio([FromBody] EjercicioRegistroRequest registro)
-        {
-            try
-            {
-                var result = await _service.RegistrarEjercicioAsync(registro);
-                return Ok(result);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ApiError { Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return StatusCode(500, new ApiError { Message = "Error interno del servidor." });
-            }
-        }
-
         [HttpGet]
         [ProducesResponseType(typeof(List<EjercicioRegistroResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status404NotFound)]

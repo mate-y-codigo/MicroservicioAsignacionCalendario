@@ -9,6 +9,7 @@ namespace MicroservicioAsignacionCalendario.Application.Interfaces.Clients
 {
     public interface IUsuariosClient
     {
+        void SetAuthToken(string token);
         Task<UsuarioResponse> ObtenerUsuario(Guid id, CancellationToken ct = default);
     }
 }

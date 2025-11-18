@@ -5,7 +5,7 @@ namespace MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan
 {
     public interface IAlumnoPlanService
     {
-        Task<AlumnoPlanResponse> AsignarPlanAsync(AlumnoPlanRequest request);
+        Task<AlumnoPlanResponse> AsignarPlanAsync(string Token, AlumnoPlanRequest request);
         Task<List<AlumnoPlanResponse>> ObtenerPlanesPorAlumnoAsync(Guid alumnoId);
     }
 }

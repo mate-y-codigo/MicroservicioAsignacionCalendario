@@ -15,7 +15,6 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan
         [DataType(DataType.DateTime)]
         public DateTime FechaFin { get; set; }
         [Required]
-        [Range(0, 3, ErrorMessage = "El intervalo de días de descanso debe ser un número entre 0 y 3.")]
         public int IntervaloDiasDescanso { get; set; }
         public string? Notas { get; set; }
     }
