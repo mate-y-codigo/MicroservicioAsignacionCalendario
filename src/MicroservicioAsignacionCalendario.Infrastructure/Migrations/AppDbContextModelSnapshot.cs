@@ -75,6 +75,9 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     b.Property<int>("DescansoObjetivo")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("FechaRealizacion")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("IdEjercicio")
                         .HasColumnType("uuid");
 
@@ -177,7 +180,16 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     b.Property<Guid>("IdAlumno")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("IdAlumnoPlan")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("IdEjercicio")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("IdEjercicioSesion")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("IdSesionRealizada")
                         .HasColumnType("uuid");
 
                     b.Property<string>("NombreEjercicio")
@@ -201,6 +213,10 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdAlumnoPlan");
+
+                    b.HasIndex("IdSesionRealizada");
 
                     b.HasIndex("IdAlumno", "IdEjercicio")
                         .IsUnique();
@@ -272,6 +288,25 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     b.Navigation("AlumnoPlan");
                 });
 
+            modelBuilder.Entity("MicroservicioAsignacionCalendario.Domain.Entities.RecordPersonal", b =>
+                {
+                    b.HasOne("MicroservicioAsignacionCalendario.Domain.Entities.AlumnoPlan", "AlumnoPlan")
+                        .WithMany("RecordsPersonales")
+                        .HasForeignKey("IdAlumnoPlan")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MicroservicioAsignacionCalendario.Domain.Entities.SesionRealizada", "SesionRealizada")
+                        .WithMany()
+                        .HasForeignKey("IdSesionRealizada")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AlumnoPlan");
+
+                    b.Navigation("SesionRealizada");
+                });
+
             modelBuilder.Entity("MicroservicioAsignacionCalendario.Domain.Entities.SesionRealizada", b =>
                 {
                     b.HasOne("MicroservicioAsignacionCalendario.Domain.Entities.AlumnoPlan", "AlumnoPlan")
@@ -286,6 +321,8 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
             modelBuilder.Entity("MicroservicioAsignacionCalendario.Domain.Entities.AlumnoPlan", b =>
                 {
                     b.Navigation("EventosCalendarios");
+
+                    b.Navigation("RecordsPersonales");
 
                     b.Navigation("SesionesRealizadas");
                 });

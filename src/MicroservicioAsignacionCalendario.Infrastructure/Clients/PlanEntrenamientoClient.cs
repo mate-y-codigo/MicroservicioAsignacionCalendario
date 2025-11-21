@@ -53,6 +53,22 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Clients
                 return null;
             }
         }
+
+        public async Task<EjercicioSesionResponse> ObtenerEjercicioSesion(Guid idEjercicioSesion, CancellationToken ct)
+        {
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<EjercicioSesionResponse>(
+                    $"{_urlBase}/api/ExerciseSession/{idEjercicioSesion}",
+                   ct);
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error al obtener una sesion de ejercicio: {ex.Message}");
+                return null;
+            }
+        }
+
         public async Task<EjercicioResponse> ObtenerEjercicio(Guid idEjercicio, CancellationToken ct)
         {
             try

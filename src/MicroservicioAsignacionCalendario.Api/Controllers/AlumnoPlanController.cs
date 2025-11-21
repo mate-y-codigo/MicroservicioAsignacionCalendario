@@ -58,5 +58,26 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
             var result = await _service.ObtenerPlanesPorAlumnoAsync(alumno_id);
             return Ok(result);
         }
+
+        [HttpGet("check/{planEntrenamiento_id}")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PlanEntrenamientoAsignado([FromRoute] Guid planEntrenamiento_id)
+        {
+            try
+            {
+                var result = await _service.PlanEntrenamientoAsignado(planEntrenamiento_id);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ApiError { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, new ApiError { Message = "Error interno del servidor." });
+            }
+        }
     }
 }

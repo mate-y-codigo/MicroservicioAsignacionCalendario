@@ -7,5 +7,6 @@ namespace MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan
     {
         Task<AlumnoPlanResponse> AsignarPlanAsync(string Token, AlumnoPlanRequest request);
         Task<List<AlumnoPlanResponse>> ObtenerPlanesPorAlumnoAsync(Guid alumnoId);
+        Task<bool> PlanEntrenamientoAsignado(Guid idPlanEntrenamiento);
     }
 }

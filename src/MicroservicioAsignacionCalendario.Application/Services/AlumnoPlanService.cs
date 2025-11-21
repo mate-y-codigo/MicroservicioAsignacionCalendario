@@ -10,6 +10,8 @@ using MicroservicioAsignacionCalendario.Domain.Entities;
 using Application.DTOs.AlumnoPlan;
 using AutoMapper;
 using Application.Interfaces.EventoCalendario;
+using System.Runtime.CompilerServices;
+using Interfaces.Query;
 
 namespace Application.Services
 {
@@ -77,6 +79,15 @@ namespace Application.Services
         public async Task<List<AlumnoPlanResponse>> ObtenerPlanesPorAlumnoAsync(Guid alumnoId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> PlanEntrenamientoAsignado(Guid idPlanEntrenamiento)
+        {
+            var planExists = await _planEntrenamientoClient.ObtenerPlanEntrenamiento(idPlanEntrenamiento);
+            if (planExists == null)
+                throw new NotFoundException("El plan de entrenamiento no existe.");
+
+            return await _query.PlanEntrenamientoAsignado(idPlanEntrenamiento);
         }
     }
 }

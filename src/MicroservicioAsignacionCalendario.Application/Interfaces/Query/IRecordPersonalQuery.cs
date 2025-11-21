@@ -11,5 +11,6 @@ namespace Application.Interfaces.Query
     public interface IRecordPersonalQuery
     {
         Task<List<RecordPersonal>> ObtenerRecordsPersonales(RecordPersonalFilterRequest filtros);
+        Task<RecordPersonal?> ObtenerRecordPersonalPorId(Guid idAlumnoPlan, Guid IdEjercicio);
     }
 }

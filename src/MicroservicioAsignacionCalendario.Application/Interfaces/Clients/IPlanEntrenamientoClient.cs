@@ -14,6 +14,6 @@ namespace MicroservicioAsignacionCalendario.Application.Interfaces.Clients
         Task<PlanEntrenamientoResponse> ObtenerPlanEntrenamiento(Guid id, CancellationToken ct = default);
         Task<SesionEntrenamientoResponse> ObtenerSesionEntrenamiento(Guid id, CancellationToken ct = default);
         Task<EjercicioResponse> ObtenerEjercicio(Guid id, CancellationToken ct = default);
-        //Task<EjercicioSesionResponse> ObtenerEjercicioSesion(Guid id, CancellationToken ct = default);
+        Task<EjercicioSesionResponse> ObtenerEjercicioSesion(Guid id, CancellationToken ct = default);
     }
 }

@@ -1,4 +1,4 @@
-﻿using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
+﻿using Interfaces.Query;
 using MicroservicioAsignacionCalendario.Domain.Entities;
 using MicroservicioAsignacionCalendario.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +16,11 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Queries
         {
             return await _context.AlumnoPlan
                 .FirstOrDefaultAsync(ap => ap.IdAlumno == idAlumno && ap.Estado == EstadoAlumnoPlan.Activo);
+        }
+
+        public async Task<bool> PlanEntrenamientoAsignado(Guid idPlanEntrenamiento)
+        {
+            return await _context.AlumnoPlan.AnyAsync(ap => ap.IdPlanEntrenamiento == idPlanEntrenamiento);
         }
     }
 }
