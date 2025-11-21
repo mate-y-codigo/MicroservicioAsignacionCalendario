@@ -20,7 +20,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Queries
 
         public async Task<bool> PlanEntrenamientoAsignado(Guid idPlanEntrenamiento)
         {
-            return await _context.AlumnoPlan.AnyAsync(ap => ap.IdPlanEntrenamiento == idPlanEntrenamiento);
+            return await _context.AlumnoPlan.AnyAsync(ap => ap.IdPlanEntrenamiento == idPlanEntrenamiento && ap.Estado == EstadoAlumnoPlan.Activo);
         }
     }
 }

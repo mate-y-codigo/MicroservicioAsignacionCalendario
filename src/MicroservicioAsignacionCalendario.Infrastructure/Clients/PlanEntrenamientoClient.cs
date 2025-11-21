@@ -1,6 +1,7 @@
 ﻿using MicroservicioAsignacionCalendario.Application.DTOs.EjercicioSesion;
 using MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento;
 using MicroservicioAsignacionCalendario.Application.DTOs.SesionEntrenamiento;
+using MicroservicioAsignacionCalendario.Application.DTOs.Usuario;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Clients;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Clients
     public class PlanEntrenamientoClient : IPlanEntrenamientoClient
     {
         private readonly HttpClient _httpClient;
-        private readonly string _urlBase = "http://localhost:5097";
-
+       
         public PlanEntrenamientoClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -24,64 +24,52 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Clients
 
         public async Task<PlanEntrenamientoResponse> ObtenerPlanEntrenamiento(Guid id, CancellationToken ct)
         {
-            try
-            {
-                return await _httpClient.GetFromJsonAsync<PlanEntrenamientoResponse>(
-                    $"{_urlBase}/api/TrainingPlan/{id}",
-                    ct);
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Error al obtener un plan de entrenamiento: {ex.Message}");
-                return null;
-            }
+               var response =  await _httpClient.GetAsync($"api/TrainingPlan/{id}");
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorBody = await response.Content.ReadAsStringAsync(ct);
+                    Console.WriteLine($"Error al llamar a ConfigRutina API: {response.StatusCode} - {errorBody}");
+                    return null;
+
+                }
+                return await response.Content.ReadFromJsonAsync<PlanEntrenamientoResponse>(cancellationToken: ct);
         }
+  
 
         public async Task<SesionEntrenamientoResponse> ObtenerSesionEntrenamiento(Guid id, CancellationToken ct)
         {
-            try
+            var response = await _httpClient.GetAsync($"api/TrainingSession/{id}", ct);
+            if (!response.IsSuccessStatusCode)
             {
-                var result = await _httpClient.GetFromJsonAsync<SesionEntrenamientoResponse>(
-                    $"{_urlBase}/api/TrainingSession/{id}",
-                   ct);
-                Console.WriteLine(result);
-                return result;
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Error al obtener una sesion de entrenamiento: {ex.Message}");
+                var errorBody = await response.Content.ReadAsStringAsync(ct);
+                Console.WriteLine($"Error al llamar a ConfigRutina API: {response.StatusCode} - {errorBody}");
                 return null;
+
             }
+            return await response.Content.ReadFromJsonAsync<SesionEntrenamientoResponse>(cancellationToken: ct);
         }
 
         public async Task<EjercicioSesionResponse> ObtenerEjercicioSesion(Guid idEjercicioSesion, CancellationToken ct)
         {
-            try
-            {
-                return await _httpClient.GetFromJsonAsync<EjercicioSesionResponse>(
-                    $"{_urlBase}/api/ExerciseSession/{idEjercicioSesion}",
-                   ct);
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Error al obtener una sesion de ejercicio: {ex.Message}");
+            var response = await _httpClient.GetAsync($"api/ExerciseSession/{idEjercicioSesion}", ct);
+            if (!response.IsSuccessStatusCode) {
+                var errorBody = await response.Content.ReadAsStringAsync(ct);
+                Console.WriteLine($"Error al llamar a ConfigRutina API:{response.StatusCode} - {errorBody}");
                 return null;
             }
+            return await response.Content.ReadFromJsonAsync<EjercicioSesionResponse>(cancellationToken: ct);
+             
         }
 
         public async Task<EjercicioResponse> ObtenerEjercicio(Guid idEjercicio, CancellationToken ct)
         {
-            try
-            {
-                return await _httpClient.GetFromJsonAsync<EjercicioResponse>(
-                    $"{_urlBase}/api/Exercise/{idEjercicio}",
-                   ct);
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Error al obtener un ejercicio: {ex.Message}");
+            var response = await _httpClient.GetAsync($"api/Exercise/{idEjercicio}", ct);
+            if (!response.IsSuccessStatusCode) { 
+                var errorBody = await response.Content.ReadAsStringAsync (ct);
+                Console.WriteLine($"Error al llamar a ConfigRutina API:{response.StatusCode} - {errorBody}");
                 return null;
             }
+            return await response.Content.ReadFromJsonAsync<EjercicioResponse>(cancellationToken: ct);
         }
 
 

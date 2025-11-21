@@ -81,6 +81,7 @@ namespace Application.Services
             throw new NotImplementedException();
         }
 
+        // este es el que usan para validar (micro config)
         public async Task<bool> PlanEntrenamientoAsignado(Guid idPlanEntrenamiento)
         {
             var planExists = await _planEntrenamientoClient.ObtenerPlanEntrenamiento(idPlanEntrenamiento);

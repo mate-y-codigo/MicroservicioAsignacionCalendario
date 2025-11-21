@@ -77,7 +77,11 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<TokenPropagationHandler>();
 
 // Set HttpClients
-builder.Services.AddHttpClient<IPlanEntrenamientoClient, PlanEntrenamientoClient>();
+builder.Services.AddHttpClient<IPlanEntrenamientoClient, PlanEntrenamientoClient>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["Services:PlanEntrenamientoClientUrl"]);
+}).AddHttpMessageHandler<TokenPropagationHandler>();
+
 builder.Services.AddHttpClient<IUsuariosClient, UsuariosClient>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["Services:UsuariosClientUrl"]);
