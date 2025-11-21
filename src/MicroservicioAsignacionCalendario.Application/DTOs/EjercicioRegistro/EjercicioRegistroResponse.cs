@@ -19,6 +19,7 @@
         public int RepeticionesObjetivo { get; set; }
         public decimal Peso { get; set; }
         public decimal PesoObjetivo { get; set; }
+        public DateTime FechaRealizacion { get; set; }
         public bool Completado { get; set; }
     }
 }

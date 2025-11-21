@@ -38,6 +38,11 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
                   .WithOne(ec => ec.AlumnoPlan)
                   .HasForeignKey(ec => ec.IdAlumnoPlan)
                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(ap => ap.RecordsPersonales)
+                .WithOne(rp => rp.AlumnoPlan)
+                .HasForeignKey(rp => rp.IdAlumnoPlan)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

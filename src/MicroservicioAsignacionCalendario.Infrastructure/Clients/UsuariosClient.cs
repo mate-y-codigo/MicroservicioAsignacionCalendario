@@ -35,6 +35,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Clients
                 Console.WriteLine($"Error al llamar a Usuarios API: {response.StatusCode} - {errorBody}");
                 return null;
             }
+            
             return await response.Content.ReadFromJsonAsync<UsuarioResponse>(cancellationToken: ct);
         }
     }

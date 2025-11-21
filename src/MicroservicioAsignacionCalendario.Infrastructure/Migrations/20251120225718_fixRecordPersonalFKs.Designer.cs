@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251113023007_MicroAsignacionInit")]
-    partial class MicroAsignacionInit
+    [Migration("20251120225718_fixRecordPersonalFKs")]
+    partial class fixRecordPersonalFKs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,6 +77,9 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
 
                     b.Property<int>("DescansoObjetivo")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaRealizacion")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("IdEjercicio")
                         .HasColumnType("uuid");
@@ -170,6 +173,9 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("AlumnoPlanId")
+                        .HasColumnType("uuid");
+
                     b.Property<decimal>("Calculo1RM")
                         .HasPrecision(6, 2)
                         .HasColumnType("numeric(6,2)");
@@ -180,7 +186,16 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     b.Property<Guid>("IdAlumno")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("IdAlumnoPlan")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("IdEjercicio")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("IdEjercicioSesion")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("IdSesionRealizada")
                         .HasColumnType("uuid");
 
                     b.Property<string>("NombreEjercicio")
@@ -203,7 +218,16 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     b.Property<int>("Series")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("SesionRealizadaId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AlumnoPlanId");
+
+                    b.HasIndex("IdAlumnoPlan");
+
+                    b.HasIndex("SesionRealizadaId");
 
                     b.HasIndex("IdAlumno", "IdEjercicio")
                         .IsUnique();
@@ -273,6 +297,31 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("AlumnoPlan");
+                });
+
+            modelBuilder.Entity("MicroservicioAsignacionCalendario.Domain.Entities.RecordPersonal", b =>
+                {
+                    b.HasOne("MicroservicioAsignacionCalendario.Domain.Entities.AlumnoPlan", "AlumnoPlan")
+                        .WithMany()
+                        .HasForeignKey("AlumnoPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MicroservicioAsignacionCalendario.Domain.Entities.AlumnoPlan", null)
+                        .WithMany()
+                        .HasForeignKey("IdAlumnoPlan")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MicroservicioAsignacionCalendario.Domain.Entities.SesionRealizada", "SesionRealizada")
+                        .WithMany()
+                        .HasForeignKey("SesionRealizadaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AlumnoPlan");
+
+                    b.Navigation("SesionRealizada");
                 });
 
             modelBuilder.Entity("MicroservicioAsignacionCalendario.Domain.Entities.SesionRealizada", b =>

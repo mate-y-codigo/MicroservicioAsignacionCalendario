@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Command;
+using MicroservicioAsignacionCalendario.Application.CustomExceptions;
 using MicroservicioAsignacionCalendario.Domain.Entities;
 using MicroservicioAsignacionCalendario.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace Infrastructure.Commands
             _context = context;
         }
 
-        public async Task InsertarSesionRealizadaCompleta(SesionRealizada sesion, List<EjercicioRegistro> ejercicios, Guid idAlumno)
+        public async Task InsertarSesionRealizadaCompleta(SesionRealizada sesion)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
@@ -27,72 +28,24 @@ namespace Infrastructure.Commands
                 {
                     await _context.SesionRealizada.AddAsync(sesion);
                     await _context.SaveChangesAsync();
-
-                    foreach (var ejercicio in ejercicios)
-                    {
-                        ejercicio.IdSesionRealizada = sesion.Id;
-                    }
-
-                    await _context.EjercicioRegistro.AddRangeAsync(ejercicios);
-
-                    await ActualizarRecords(idAlumno, ejercicios, sesion.FechaRealizacion);
-
-                    await _context.SaveChangesAsync();
                     await transaction.CommitAsync();
+                }
+                catch (DbUpdateException dbEx)
+                {
+                    await transaction.RollbackAsync();
+
+                    if (dbEx.InnerException is Npgsql.PostgresException postgresEx)
+                    {
+                        if (postgresEx.SqlState == "23505")
+                            throw new ConflictException("No se pudo guardar. Ya existe un registro similar o la clave ya está en uso.");
+                        throw new BadRequestException($"Error de datos al guardar la sesión: {postgresEx.Detail}");
+                    }
+                    throw new Exception("Fallo interno de persistencia de datos.", dbEx);
                 }
                 catch (Exception)
                 {
                     await transaction.RollbackAsync();
                     throw;
-                }
-            }
-        }
-
-        private async Task ActualizarRecords(Guid idAlumno, List<EjercicioRegistro> nuevosEjercicios, DateTime fechaRegistro)
-        {
-            var idsEjercicios = nuevosEjercicios.Select(e => e.IdEjercicio).Distinct();
-
-            var recordsExistentes = await _context.RecordPersonal
-                .Where(r => r.IdAlumno == idAlumno && idsEjercicios.Contains(r.IdEjercicio))
-                .ToDictionaryAsync(r => r.IdEjercicio);
-
-            foreach (var ejercicio in nuevosEjercicios)
-            {
-                if (recordsExistentes.TryGetValue(ejercicio.IdEjercicio, out var recordExistente))
-                {
-                    bool esNuevoRecord = false;
-
-                    if (ejercicio.Peso > recordExistente.PesoMax)
-                        esNuevoRecord = true;
-                    else if (ejercicio.Peso == recordExistente.PesoMax && ejercicio.Repeticiones > recordExistente.Repeticiones)
-                        esNuevoRecord = true;
-
-                    if (esNuevoRecord)
-                    {
-                        recordExistente.PesoMax = ejercicio.Peso;
-                        recordExistente.Repeticiones = ejercicio.Repeticiones;
-                        recordExistente.Series = ejercicio.Series;
-                        recordExistente.FechaRegistro = fechaRegistro;
-                        recordExistente.NombreEjercicio = ejercicio.NombreEjercicio;
-
-                        _context.RecordPersonal.Update(recordExistente);
-                    }
-                }
-                else
-                {
-                    var nuevoRecord = new RecordPersonal
-                    {
-                        IdAlumno = idAlumno,
-                        IdEjercicio = ejercicio.IdEjercicio,
-                        PesoMax = ejercicio.Peso,
-                        Repeticiones = ejercicio.Repeticiones,
-                        Series = ejercicio.Series,
-                        FechaRegistro = fechaRegistro,
-                        NombreEjercicio = ejercicio.NombreEjercicio
-                    };
-
-                    await _context.RecordPersonal.AddAsync(nuevoRecord);
-                    recordsExistentes.Add(ejercicio.IdEjercicio, nuevoRecord);
                 }
             }
         }

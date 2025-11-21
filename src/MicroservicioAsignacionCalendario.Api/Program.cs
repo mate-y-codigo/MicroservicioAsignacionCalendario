@@ -5,6 +5,7 @@ using Application.Services;
 using AutoMapper;
 using Infrastructure.Commands;
 using Infrastructure.Queries;
+using Interfaces.Query;
 using MicroservicioAsignacionCalendario.Api.Auth;
 using MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Clients;
@@ -15,6 +16,7 @@ using MicroservicioAsignacionCalendario.Application.Interfaces.SesionRealizada;
 using MicroservicioAsignacionCalendario.Application.Mapper;
 using MicroservicioAsignacionCalendario.Application.Services;
 using MicroservicioAsignacionCalendario.Infrastructure.Clients;
+using MicroservicioAsignacionCalendario.Infrastructure.Commands;
 using MicroservicioAsignacionCalendario.Infrastructure.Data;
 using MicroservicioAsignacionCalendario.Infrastructure.Persistence.Commands;
 using MicroservicioAsignacionCalendario.Infrastructure.Queries;
@@ -75,7 +77,11 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<TokenPropagationHandler>();
 
 // Set HttpClients
-builder.Services.AddHttpClient<IPlanEntrenamientoClient, PlanEntrenamientoClient>();
+builder.Services.AddHttpClient<IPlanEntrenamientoClient, PlanEntrenamientoClient>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["Services:PlanEntrenamientoClientUrl"]);
+}).AddHttpMessageHandler<TokenPropagationHandler>();
+
 builder.Services.AddHttpClient<IUsuariosClient, UsuariosClient>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["Services:UsuariosClientUrl"]);
@@ -88,6 +94,7 @@ builder.Services.AddScoped<IEjercicioRegistroQuery, EjercicioRegistroQuery>();
 builder.Services.AddScoped<ISesionRealizadaCommand, SesionRealizadaCommand>();
 builder.Services.AddScoped<ISesionRealizadaQuery, SesionesRealizadasQuery>();
 builder.Services.AddScoped<IEventoCalendarioCommand, EventoCalendarioCommand>();
+builder.Services.AddScoped<IRecordPersonalCommand, RecordPersonalCommand>();
 builder.Services.AddScoped<IRecordPersonalQuery, RecordPersonalQuery>();
 
 // Set Mapper

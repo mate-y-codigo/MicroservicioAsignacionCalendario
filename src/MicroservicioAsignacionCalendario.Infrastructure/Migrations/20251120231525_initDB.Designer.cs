@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251027035214_initMicro")]
-    partial class initMicro
+    [Migration("20251120231525_initDB")]
+    partial class initDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,18 +31,18 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Estado")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
+                    b.Property<string>("DescripcionPlan")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("FechaFin")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("FechaInicio")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("IdAlumno")
                         .HasColumnType("uuid");
@@ -50,11 +50,16 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     b.Property<Guid>("IdPlanEntrenamiento")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("IdSesionActual")
+                    b.Property<Guid>("IdSesionARealizar")
                         .HasColumnType("uuid");
 
                     b.Property<int>("IntervaloDiasDescanso")
                         .HasColumnType("int");
+
+                    b.Property<string>("NombrePlan")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Notas")
                         .HasColumnType("text");
@@ -70,25 +75,61 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("Completado")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bool")
-                        .HasDefaultValue(false);
+                    b.Property<int>("DescansoObjetivo")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaRealizacion")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("IdEjercicio")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("IdEjercicioSesion")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("IdSesionRealizada")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("NombreCategoria")
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)");
+
+                    b.Property<string>("NombreEjercicio")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("NombreGrupoMuscular")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("NombreMusculo")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<int>("OrdenEjercicio")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Peso")
                         .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal>("PesoObjetivo")
+                        .HasPrecision(6, 2)
+                        .HasColumnType("numeric(6,2)");
 
                     b.Property<int>("Repeticiones")
                         .HasColumnType("int");
 
+                    b.Property<int>("RepeticionesObjetivo")
+                        .HasColumnType("int");
+
                     b.Property<int>("Series")
                         .HasColumnType("int");
+
+                    b.Property<int>("SeriesObjetivo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UrlDemoEjercicio")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -103,29 +144,14 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Estado")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("FechaActualizacion")
+                    b.Property<DateTime>("FechaProgramada")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("FechaCreacion")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<DateTime>("FechaFin")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("FechaInicio")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("IdAlumno")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("IdEntrenador")
+                    b.Property<Guid>("IdAlumnoPlan")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("IdSesionEntrenamiento")
@@ -136,6 +162,8 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IdAlumnoPlan");
+
                     b.ToTable("EventoCalendario", (string)null);
                 });
 
@@ -145,19 +173,41 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<decimal>("Calculo1RM")
+                        .HasPrecision(6, 2)
+                        .HasColumnType("numeric(6,2)");
+
                     b.Property<DateTime>("FechaRegistro")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("IdAlumno")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("IdAlumnoPlan")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("IdEjercicio")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("IdEjercicioSesion")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("IdSesionRealizada")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("NombreEjercicio")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("NombreGrupoMuscular")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
                     b.Property<decimal>("PesoMax")
-                        .HasColumnType("decimal(10,2)");
+                        .HasPrecision(6, 2)
+                        .HasColumnType("numeric(6,2)");
 
                     b.Property<int>("Repeticiones")
                         .HasColumnType("int");
@@ -166,6 +216,13 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdAlumnoPlan");
+
+                    b.HasIndex("IdSesionRealizada");
+
+                    b.HasIndex("IdAlumno", "IdEjercicio")
+                        .IsUnique();
 
                     b.ToTable("RecordPersonal", (string)null);
                 });
@@ -176,25 +233,38 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Estado")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                    b.Property<decimal?>("AlturaEnCmAlumno")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("numeric(5,2)");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("FechaRealizacion")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("IdPlanAlumno")
+                    b.Property<Guid>("IdAlumnoPlan")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("IdSesionEntrenamiento")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("NombreSesion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("OrdenSesion")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("PesoCorporalAlumno")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("numeric(5,2)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdPlanAlumno");
+                    b.HasIndex("IdAlumnoPlan");
 
                     b.ToTable("SesionRealizada", (string)null);
                 });
@@ -204,8 +274,38 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     b.HasOne("MicroservicioAsignacionCalendario.Domain.Entities.SesionRealizada", "SesionRealizada")
                         .WithMany("EjerciciosRegistrados")
                         .HasForeignKey("IdSesionRealizada")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SesionRealizada");
+                });
+
+            modelBuilder.Entity("MicroservicioAsignacionCalendario.Domain.Entities.EventoCalendario", b =>
+                {
+                    b.HasOne("MicroservicioAsignacionCalendario.Domain.Entities.AlumnoPlan", "AlumnoPlan")
+                        .WithMany("EventosCalendarios")
+                        .HasForeignKey("IdAlumnoPlan")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AlumnoPlan");
+                });
+
+            modelBuilder.Entity("MicroservicioAsignacionCalendario.Domain.Entities.RecordPersonal", b =>
+                {
+                    b.HasOne("MicroservicioAsignacionCalendario.Domain.Entities.AlumnoPlan", "AlumnoPlan")
+                        .WithMany("RecordsPersonales")
+                        .HasForeignKey("IdAlumnoPlan")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("MicroservicioAsignacionCalendario.Domain.Entities.SesionRealizada", "SesionRealizada")
+                        .WithMany()
+                        .HasForeignKey("IdSesionRealizada")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AlumnoPlan");
 
                     b.Navigation("SesionRealizada");
                 });
@@ -214,8 +314,8 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                 {
                     b.HasOne("MicroservicioAsignacionCalendario.Domain.Entities.AlumnoPlan", "AlumnoPlan")
                         .WithMany("SesionesRealizadas")
-                        .HasForeignKey("IdPlanAlumno")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("IdAlumnoPlan")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AlumnoPlan");
@@ -223,6 +323,10 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
 
             modelBuilder.Entity("MicroservicioAsignacionCalendario.Domain.Entities.AlumnoPlan", b =>
                 {
+                    b.Navigation("EventosCalendarios");
+
+                    b.Navigation("RecordsPersonales");
+
                     b.Navigation("SesionesRealizadas");
                 });
 

@@ -35,6 +35,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             builder.Property(er => er.Series).HasColumnType("int").IsRequired();
             builder.Property(er => er.Repeticiones).HasColumnType("int").IsRequired();
             builder.Property(er => er.Peso).HasColumnType("decimal(10,2)").IsRequired();
+            builder.Property(er => er.FechaRealizacion).IsRequired();
         }
     }
 }

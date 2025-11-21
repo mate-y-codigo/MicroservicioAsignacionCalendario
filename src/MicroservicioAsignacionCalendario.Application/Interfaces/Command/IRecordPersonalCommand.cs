@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.Command
 {
-    public interface ISesionRealizadaCommand
+    public interface IRecordPersonalCommand
     {
-        Task InsertarSesionRealizadaCompleta(SesionRealizada sesion);
+        Task InsertarRecordPersonal(RecordPersonal record);
+        Task ActualizarRecordPersonal(RecordPersonal record);
     }
 }

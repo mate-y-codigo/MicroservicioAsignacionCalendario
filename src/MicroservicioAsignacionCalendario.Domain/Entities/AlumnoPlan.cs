@@ -22,5 +22,6 @@
         // Relación Base de datos
         public ICollection<SesionRealizada> SesionesRealizadas { get; set; } = new List<SesionRealizada>();
         public ICollection<EventoCalendario> EventosCalendarios { get; set; } = new List<EventoCalendario>();
+        public ICollection<RecordPersonal> RecordsPersonales{ get; set; } = new List<RecordPersonal>();
     }
 }

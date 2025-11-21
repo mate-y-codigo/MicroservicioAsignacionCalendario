@@ -28,6 +28,7 @@ namespace MicroservicioAsignacionCalendario.Domain.Entities
         public int Series { get; set; }
         public int Repeticiones { get; set; }
         public decimal Peso { get; set; }
+        public DateTime FechaRealizacion { get; set; }
 
         // Relacion Base de datos
         public virtual SesionRealizada SesionRealizada { get; set; } = null!;
