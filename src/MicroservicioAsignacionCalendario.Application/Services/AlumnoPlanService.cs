@@ -81,8 +81,12 @@ namespace Application.Services
         {
            
             var user = await _usuariosClient.ObtenerUsuario(alumnoId);
+
             if (user == null)
                 throw new NotFoundException("El usuario ingresado no existe");
+
+            if (user.RolId != 3)
+                throw new BadRequestException("El usuario ingresado no es un alumno");
 
             var query = await _query.ObtenerPlanesPorAlumno(alumnoId);
 
