@@ -44,6 +44,8 @@ namespace Infrastructure.Queries
             if (filtros.Hasta.HasValue)
                 query = query.Where(r => r.FechaRegistro.Date <= filtros.Hasta);
 
+            query.Include(r => r.IdSesionRealizada);
+
             bool esDescendente = filtros.Orden?.ToLower() == "desc";
 
             switch (filtros.OrdenarPor?.ToLower())

@@ -19,8 +19,7 @@ namespace Application.Services
             _eventoCommand = eventoCommand;
         }
 
-        public async Task<List<EventoCalendarioResponse>>
-            ObtenerEventosAsync(EventoCalendarioFilterRequest filtros)
+        public async Task<List<EventoCalendarioResponse>>ObtenerEventosAsync(EventoCalendarioFilterRequest filtros)
         {
             throw new NotImplementedException();
         }

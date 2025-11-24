@@ -55,8 +55,18 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ObtenerPlanesPorAlumno([FromRoute] Guid alumno_id)
         {
-            var result = await _service.ObtenerPlanesPorAlumnoAsync(alumno_id);
-            return Ok(result);
+            try
+            {
+                var result = await _service.ObtenerPlanesPorAlumnoAsync(alumno_id);
+                return Ok(result);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return BadRequest(new ApiError { Message = ex.Message });
+            }
+            catch (NotFoundException ex) {
+                return NotFound(new ApiError { Message = ex.Message });
+            }
         }
 
         [HttpGet("check/{planEntrenamiento_id}")]

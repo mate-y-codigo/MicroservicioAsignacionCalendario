@@ -11,5 +11,6 @@ namespace Interfaces.Query
     {
         Task<AlumnoPlan> ObtenerAlumnoPlan(Guid id);
         Task<bool> PlanEntrenamientoAsignado(Guid idPlanEntrenamiento);
+        Task<List<AlumnoPlan>> ObtenerPlanesPorAlumno(Guid IdAlumno);
     }
 }

@@ -12,6 +12,7 @@ using AutoMapper;
 using Application.Interfaces.EventoCalendario;
 using System.Runtime.CompilerServices;
 using Interfaces.Query;
+using System.Reflection.Metadata;
 
 namespace Application.Services
 {
@@ -78,7 +79,21 @@ namespace Application.Services
         // TO DO: Implementar método
         public async Task<List<AlumnoPlanResponse>> ObtenerPlanesPorAlumnoAsync(Guid alumnoId)
         {
-            throw new NotImplementedException();
+           
+            var user = await _usuariosClient.ObtenerUsuario(alumnoId);
+            if (user == null)
+                throw new NotFoundException("El usuario ingresado no existe");
+
+            var query = await _query.ObtenerPlanesPorAlumno(alumnoId);
+
+            var lista = new List<AlumnoPlanResponse>();
+
+            foreach (var elemento in query){
+                lista.Add(_mapper.Map<AlumnoPlanResponse>(elemento));
+            }
+
+            return lista;
+
         }
 
         // este es el que usan para validar (micro config)
@@ -90,5 +105,7 @@ namespace Application.Services
 
             return await _query.PlanEntrenamientoAsignado(idPlanEntrenamiento);
         }
+
+
     }
 }

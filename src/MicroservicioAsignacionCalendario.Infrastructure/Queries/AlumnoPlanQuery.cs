@@ -22,5 +22,14 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Queries
         {
             return await _context.AlumnoPlan.AnyAsync(ap => ap.IdPlanEntrenamiento == idPlanEntrenamiento && ap.Estado == EstadoAlumnoPlan.Activo);
         }
+
+        public async Task<List<AlumnoPlan>> ObtenerPlanesPorAlumno(Guid IdAlumno)
+        {
+            return await _context.AlumnoPlan.AsNoTracking()
+                .Where(Pa => Pa.IdAlumno == IdAlumno && Pa.Estado == EstadoAlumnoPlan.Activo)
+                .Include(Pa => Pa.EventosCalendarios)
+                .Include(Pa => Pa.SesionesRealizadas)
+                .ToListAsync();
+        }
     }
 }
