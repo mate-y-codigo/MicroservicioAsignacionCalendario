@@ -70,16 +70,15 @@ namespace Application.Services
 
             await _command.InsertarAlumnoPlan(alumnoPlan);
 
-            // TO DO: Crear un evento Calendario..
-           /* await _eventoCalendarioService.CrearEventosDePlanAsync(alumnoPlan, plan)*/;
+            // creo solo el primer evento 
+            await _eventoCalendarioService.CrearPrimerEventoAsync(alumnoPlan);
 
             return _mapper.Map<AlumnoPlanResponse>(alumnoPlan);
         }
 
-        // TO DO: Implementar método
         public async Task<List<AlumnoPlanResponse>> ObtenerPlanesPorAlumnoAsync(Guid alumnoId)
         {
-           
+
             var user = await _usuariosClient.ObtenerUsuario(alumnoId);
 
             if (user == null)
@@ -92,7 +91,8 @@ namespace Application.Services
 
             var lista = new List<AlumnoPlanResponse>();
 
-            foreach (var elemento in query){
+            foreach (var elemento in query)
+            {
                 lista.Add(_mapper.Map<AlumnoPlanResponse>(elemento));
             }
 
@@ -100,7 +100,7 @@ namespace Application.Services
 
         }
 
-        // este es el que usan para validar (micro config)
+        // este es el que usan par  a validar (micro config)
         public async Task<bool> PlanEntrenamientoAsignado(Guid idPlanEntrenamiento)
         {
             var planExists = await _planEntrenamientoClient.ObtenerPlanEntrenamiento(idPlanEntrenamiento);

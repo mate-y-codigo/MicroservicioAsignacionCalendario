@@ -9,5 +9,7 @@ namespace Application.Interfaces.EventoCalendario
     {
         Task<List<EventoCalendarioResponse>> ObtenerEventosAsync(EventoCalendarioFilterRequest filtros);
         Task CrearEventosDePlanAsync(AlumnoPlan alumnoPlan, PlanEntrenamientoResponse plan);
+        Task CrearPrimerEventoAsync(AlumnoPlan alumnoPlan);
+
     }
 }

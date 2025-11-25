@@ -17,9 +17,15 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.Commands
 
         public async Task InsertarEventosCalendario(IEnumerable<EventoCalendario> eventos)
         {
-            // Agregamos todos los eventos al contexto
+
             await _context.EventoCalendario.AddRangeAsync(eventos);
-            // Persistimos en la BD
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task InsertarEventoCalendario(EventoCalendario evento)
+        {
+            await _context.EventoCalendario.AddAsync(evento);
             await _context.SaveChangesAsync();
         }
     }
