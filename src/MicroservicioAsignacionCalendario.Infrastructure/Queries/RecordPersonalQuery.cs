@@ -21,10 +21,10 @@ namespace Infrastructure.Queries
             _context = context;
         }
 
-        public async Task<RecordPersonal?> ObtenerRecordPersonalPorId(Guid idAlumnoPlan, Guid IdEjercicio)
+        public async Task<RecordPersonal?> ObtenerRecordPersonalPorId(Guid idAlumno, Guid IdEjercicio)
         {
             return await _context.RecordPersonal.AsNoTracking().Include(r => r.AlumnoPlan)
-                .FirstOrDefaultAsync(r => r.IdAlumnoPlan == idAlumnoPlan && r.IdEjercicio == IdEjercicio);
+                .FirstOrDefaultAsync(r => r.IdAlumno == idAlumno && r.IdEjercicio == IdEjercicio);
         }
 
         public async Task<List<RecordPersonal>> ObtenerRecordsPersonales(RecordPersonalFilterRequest filtros)

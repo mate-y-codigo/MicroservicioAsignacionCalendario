@@ -43,7 +43,7 @@ namespace MicroservicioAsignacionCalendario.Application.Services
 
             decimal calculo1RM = Calcular1RM(peso, reps);
 
-            var recordActual = await _query.ObtenerRecordPersonalPorId(idAlumnoPlan, registro.IdEjercicio);
+            var recordActual = await _query.ObtenerRecordPersonalPorId(idAlumno, registro.IdEjercicio);
             if (recordActual == null)
             {
                 var nuevoRecord = _mapper.Map<RecordPersonal>(registro);

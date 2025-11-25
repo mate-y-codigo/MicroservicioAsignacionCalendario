@@ -1,11 +1,13 @@
 ﻿using Application.Interfaces.Command;
 using MicroservicioAsignacionCalendario.Application.CustomExceptions;
+using MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento;
 using MicroservicioAsignacionCalendario.Domain.Entities;
 using MicroservicioAsignacionCalendario.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 

@@ -5,12 +5,19 @@
         // Referencias
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid IdAlumno { get; set; }
+        public Guid IdEntrenador { get; set; }
         public Guid IdPlanEntrenamiento { get; set; }
         public Guid IdSesionARealizar { get; set; }
 
         // Snapshots: Plan de Entrenamiento
         public string NombrePlan { get; set; } = string.Empty;
         public string DescripcionPlan { get; set; } = string.Empty;
+        public int TotalSesiones { get; set; }
+        public int TotalEjercicios { get; set; }
+
+        // Snapshots: Usuarios
+        public string NombreEntrenador { get; set; } = string.Empty;
+        public string NombreAlumno { get; set; } = string.Empty;
 
         // Otros
         public DateTime FechaInicio { get; set; }

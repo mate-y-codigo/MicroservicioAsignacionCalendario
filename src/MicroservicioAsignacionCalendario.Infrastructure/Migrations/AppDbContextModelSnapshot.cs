@@ -44,6 +44,9 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     b.Property<Guid>("IdAlumno")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("IdEntrenador")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("IdPlanEntrenamiento")
                         .HasColumnType("uuid");
 
@@ -53,6 +56,15 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     b.Property<int>("IntervaloDiasDescanso")
                         .HasColumnType("int");
 
+                    b.Property<string>("NombreAlumno")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("NombreEntrenador")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("NombrePlan")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -60,6 +72,12 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
 
                     b.Property<string>("Notas")
                         .HasColumnType("text");
+
+                    b.Property<int>("TotalEjercicios")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalSesiones")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -238,7 +256,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("FechaRealizacion")
+                    b.Property<DateTime?>("FechaRealizacion")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("IdAlumnoPlan")

@@ -1,4 +1,5 @@
-﻿using MicroservicioAsignacionCalendario.Domain.Entities;
+﻿using MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento;
+using MicroservicioAsignacionCalendario.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

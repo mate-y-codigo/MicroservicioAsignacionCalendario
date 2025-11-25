@@ -12,7 +12,6 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.SesionRealizada
     {
         [Required]
         public Guid IdSesionEntrenamiento { get; set; }
-        // TO DO: El IdAlumno debe venir desde authentication..
         [Required]
         public Guid IdAlumno { get; set; }
         [Required]

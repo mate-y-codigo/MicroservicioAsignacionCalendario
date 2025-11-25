@@ -10,5 +10,6 @@ namespace Application.Interfaces.Command
     public interface IAlumnoPlanCommand
     {
         Task InsertarAlumnoPlan(AlumnoPlan alumnoPlan);
+        Task ActualizarAlumnoPlan(AlumnoPlan alumnoPlan);
     }
 }

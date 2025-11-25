@@ -17,10 +17,15 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     IdAlumno = table.Column<Guid>(type: "uuid", nullable: false),
+                    IdEntrenador = table.Column<Guid>(type: "uuid", nullable: false),
                     IdPlanEntrenamiento = table.Column<Guid>(type: "uuid", nullable: false),
                     IdSesionARealizar = table.Column<Guid>(type: "uuid", nullable: false),
                     NombrePlan = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     DescripcionPlan = table.Column<string>(type: "text", nullable: true),
+                    TotalSesiones = table.Column<int>(type: "int", nullable: false),
+                    TotalEjercicios = table.Column<int>(type: "int", nullable: false),
+                    NombreEntrenador = table.Column<string>(type: "text", nullable: false),
+                    NombreAlumno = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     FechaInicio = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     FechaFin = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IntervaloDiasDescanso = table.Column<int>(type: "int", nullable: false),
@@ -65,7 +70,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     OrdenSesion = table.Column<int>(type: "int", nullable: false),
                     PesoCorporalAlumno = table.Column<decimal>(type: "numeric(5,2)", precision: 5, scale: 2, nullable: true),
                     AlturaEnCmAlumno = table.Column<decimal>(type: "numeric(5,2)", precision: 5, scale: 2, nullable: true),
-                    FechaRealizacion = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    FechaRealizacion = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Estado = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -129,19 +134,11 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     Series = table.Column<int>(type: "int", nullable: false),
                     Repeticiones = table.Column<int>(type: "int", nullable: false),
                     FechaRegistro = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Calculo1RM = table.Column<decimal>(type: "numeric(6,2)", precision: 6, scale: 2, nullable: false),
-                    AlumnoPlanId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SesionRealizadaId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Calculo1RM = table.Column<decimal>(type: "numeric(6,2)", precision: 6, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RecordPersonal", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RecordPersonal_AlumnoPlan_AlumnoPlanId",
-                        column: x => x.AlumnoPlanId,
-                        principalTable: "AlumnoPlan",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RecordPersonal_AlumnoPlan_IdAlumnoPlan",
                         column: x => x.IdAlumnoPlan,
@@ -149,11 +146,11 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RecordPersonal_SesionRealizada_SesionRealizadaId",
-                        column: x => x.SesionRealizadaId,
+                        name: "FK_RecordPersonal_SesionRealizada_IdSesionRealizada",
+                        column: x => x.IdSesionRealizada,
                         principalTable: "SesionRealizada",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -167,11 +164,6 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                 column: "IdAlumnoPlan");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RecordPersonal_AlumnoPlanId",
-                table: "RecordPersonal",
-                column: "AlumnoPlanId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RecordPersonal_IdAlumno_IdEjercicio",
                 table: "RecordPersonal",
                 columns: new[] { "IdAlumno", "IdEjercicio" },
@@ -183,9 +175,9 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                 column: "IdAlumnoPlan");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RecordPersonal_SesionRealizadaId",
+                name: "IX_RecordPersonal_IdSesionRealizada",
                 table: "RecordPersonal",
-                column: "SesionRealizadaId");
+                column: "IdSesionRealizada");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SesionRealizada_IdAlumnoPlan",

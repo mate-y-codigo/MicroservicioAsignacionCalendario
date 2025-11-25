@@ -4,6 +4,7 @@ using AutoMapper;
 using Interfaces.Query;
 using MicroservicioAsignacionCalendario.Application.CustomExceptions;
 using MicroservicioAsignacionCalendario.Application.DTOs.SesionRealizada;
+using MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Clients;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
 using MicroservicioAsignacionCalendario.Application.Interfaces.RecordPersonal;
@@ -22,16 +23,18 @@ namespace MicroservicioAsignacionCalendario.Application.Services
         private readonly ISesionRealizadaCommand _command;
         private readonly ISesionRealizadaQuery _query;
         private readonly IAlumnoPlanQuery _alumnoPlanQuery;
+        private readonly IAlumnoPlanService _alumnoPlanService;
         private readonly IRecordPersonalService _recordPersonalService;
         private readonly IMapper _mapper;
         private readonly IPlanEntrenamientoClient _planEntrenamientoClient;
         private readonly IUsuariosClient _usuariosClient;
-        public SesionRealizadaService(ISesionRealizadaQuery query, ISesionRealizadaCommand command, IAlumnoPlanQuery alumnoPlanQuery, IMapper mapper, IRecordPersonalService recordPersonalService, IPlanEntrenamientoClient plan, IUsuariosClient usuarios)
+        public SesionRealizadaService(ISesionRealizadaQuery query, ISesionRealizadaCommand command, IAlumnoPlanService alumnoPlanService, IAlumnoPlanQuery alumnoPlanQuery, IMapper mapper, IRecordPersonalService recordPersonalService, IPlanEntrenamientoClient plan, IUsuariosClient usuarios)
         {
             _command = command;
             _query = query;
             _mapper = mapper;
             _alumnoPlanQuery = alumnoPlanQuery;
+            _alumnoPlanService = alumnoPlanService;
             _recordPersonalService = recordPersonalService;
             _planEntrenamientoClient = plan;
             _usuariosClient = usuarios;
@@ -48,7 +51,7 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 throw new NotFoundException("El alumno no tiene un plan activo");
 
             var sesionEntrenamientoPlanificada = await _planEntrenamientoClient.ObtenerSesionEntrenamiento(req.IdSesionEntrenamiento);
-            if(sesionEntrenamientoPlanificada == null)
+            if (sesionEntrenamientoPlanificada == null)
                 throw new NotFoundException("La sesión de entrenamiento no existe");
 
             var sesionRealizada = _mapper.Map<SesionRealizada>(req);
@@ -60,12 +63,15 @@ namespace MicroservicioAsignacionCalendario.Application.Services
             sesionRealizada.AlturaEnCmAlumno = alumno.Altura;
 
             sesionRealizada.EjerciciosRegistrados = new List<EjercicioRegistro>();
-            foreach(var ej in req.RegistroEjercicios)
+            foreach (var ej in req.RegistroEjercicios)
             {
-                var idSesionEjercicio = sesionEntrenamientoPlanificada.SesionesEjercicio
-                    .FirstOrDefault(e => e.IdEjercicio == ej.IdEjercicio).Id;
-                if (idSesionEjercicio == null)
+                var sesionEjercicio = sesionEntrenamientoPlanificada.SesionesEjercicio
+                    .FirstOrDefault(e => e.IdEjercicio == ej.IdEjercicio);
+
+                if (sesionEjercicio == null)
                     throw new BadRequestException($"Ejercicio {ej.IdEjercicio} no válido o no pertenece a la sesión {req.IdSesionEntrenamiento}");
+
+                var idSesionEjercicio = sesionEjercicio.Id;
 
                 var sesionEjercicioDetalle = await _planEntrenamientoClient.ObtenerEjercicioSesion(idSesionEjercicio);
                 if (sesionEjercicioDetalle == null)
@@ -79,7 +85,7 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 nuevoEjercicioRegistro.RepeticionesObjetivo = sesionEjercicioDetalle.RepeticionesObjetivo;
                 nuevoEjercicioRegistro.SeriesObjetivo = sesionEjercicioDetalle.SeriesObjetivo;
                 nuevoEjercicioRegistro.DescansoObjetivo = sesionEjercicioDetalle.Descanso;
-                nuevoEjercicioRegistro.FechaRealizacion = sesionRealizada.FechaRealizacion;
+                nuevoEjercicioRegistro.FechaRealizacion = sesionRealizada.FechaRealizacion ?? DateTime.UtcNow;
 
                 // Snapshots desde Ejercicio
                 nuevoEjercicioRegistro.NombreEjercicio = sesionEjercicioDetalle.Ejercicio.Nombre;
@@ -91,11 +97,15 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 sesionRealizada.EjerciciosRegistrados.Add(nuevoEjercicioRegistro);
             }
 
+            // Insertar Sesión Realizada
             await _command.InsertarSesionRealizadaCompleta(sesionRealizada);
+
+            // Actualizar Records Personales
             foreach (var registro in sesionRealizada.EjerciciosRegistrados)
-            {
                 await _recordPersonalService.ActualizarRecordPersonalAsync(registro);
-            }
+
+            // Actualizar Progreso del Plan
+            await _alumnoPlanService.ActualizarProgresoPlan(alumnoPlan.Id);
 
             // TO DO: ACTUALIZAR/AGREGAR NUEVO EVENTO CALENDARIO(Siguiente sesion si corresponde)
 

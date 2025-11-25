@@ -26,7 +26,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
 
             // Otros
             builder.Property(sr => sr.Estado).HasConversion<string>();
-            builder.Property(sr => sr.FechaRealizacion).IsRequired();
+            builder.Property(sr => sr.FechaRealizacion).IsRequired(false);
 
             builder.HasMany(e => e.EjerciciosRegistrados)
               .WithOne(er => er.SesionRealizada)

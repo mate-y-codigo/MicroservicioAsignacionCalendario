@@ -16,7 +16,7 @@
         public decimal? AlturaEnCmAlumno { get; set; }
 
         // Otros
-        public DateTime FechaRealizacion { get; set; }
+        public DateTime? FechaRealizacion { get; set; }
         public EstadoSesion Estado { get; set; } = EstadoSesion.Pendiente;
 
         // Relaciones de Base de datos
