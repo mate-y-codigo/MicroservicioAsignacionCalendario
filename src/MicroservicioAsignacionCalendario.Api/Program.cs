@@ -19,6 +19,7 @@ using MicroservicioAsignacionCalendario.Infrastructure.Clients;
 using MicroservicioAsignacionCalendario.Infrastructure.Commands;
 using MicroservicioAsignacionCalendario.Infrastructure.Data;
 using MicroservicioAsignacionCalendario.Infrastructure.Persistence.Commands;
+using MicroservicioAsignacionCalendario.Infrastructure.Persistence.Queries;
 using MicroservicioAsignacionCalendario.Infrastructure.Queries;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -94,6 +95,7 @@ builder.Services.AddScoped<IEjercicioRegistroQuery, EjercicioRegistroQuery>();
 builder.Services.AddScoped<ISesionRealizadaCommand, SesionRealizadaCommand>();
 builder.Services.AddScoped<ISesionRealizadaQuery, SesionesRealizadasQuery>();
 builder.Services.AddScoped<IEventoCalendarioCommand, EventoCalendarioCommand>();
+builder.Services.AddScoped<IEventoCalendarioQuery, EventoCalendarioQuery>();
 builder.Services.AddScoped<IRecordPersonalCommand, RecordPersonalCommand>();
 builder.Services.AddScoped<IRecordPersonalQuery, RecordPersonalQuery>();
 
