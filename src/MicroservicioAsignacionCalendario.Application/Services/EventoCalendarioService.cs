@@ -77,5 +77,32 @@ namespace Application.Services
 
             await _eventoCommand.InsertarEventoCalendario(evento);
         }
+
+
+        public async Task CrearSiguienteEventoAsync(AlumnoPlan alumnoPlan, DateTime fechaBase)
+        {
+            // nueva fecha 
+            var fechaProgramada = fechaBase
+                .AddDays(alumnoPlan.IntervaloDiasDescanso + 1);
+
+
+            if (fechaProgramada.Date > alumnoPlan.FechaFin.Date)
+                return;
+
+            var nuevoEvento = new EventoCalendario
+            {
+                Id = Guid.NewGuid(),
+                IdAlumnoPlan = alumnoPlan.Id,
+                IdSesionEntrenamiento = alumnoPlan.IdSesionARealizar,
+                FechaProgramada = fechaProgramada,
+                Estado = EstadoEvento.Programado,
+                Notas = null
+            };
+
+            await _eventoCommand.InsertarEventoCalendario(nuevoEvento);
+        }
+
+
     }
+
 }
