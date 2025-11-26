@@ -14,12 +14,19 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
 
             // Referencias
             builder.Property(ap => ap.IdAlumno).HasColumnType("uuid").IsRequired();
+            builder.Property(ap => ap.IdEntrenador).HasColumnType("uuid").IsRequired();
             builder.Property(ap => ap.IdPlanEntrenamiento).HasColumnType("uuid").IsRequired();
             builder.Property(ap => ap.IdSesionARealizar).HasColumnType("uuid").IsRequired();
 
             // Snapshot: Plan de Entrenamiento
             builder.Property(ap => ap.NombrePlan).HasMaxLength(100).IsRequired();
             builder.Property(ap => ap.DescripcionPlan).HasColumnType("text").IsRequired(false);
+            builder.Property(ap => ap.TotalSesiones).HasColumnType("int").IsRequired();
+            builder.Property(ap => ap.TotalEjercicios).HasColumnType("int").IsRequired();
+
+            // Snapshot: Usuarios
+            builder.Property(ap => ap.NombreAlumno).HasMaxLength(100).IsRequired();
+            builder.Property(ap => ap.NombreEntrenador).HasColumnType("text").IsRequired();
 
             // Otros
             builder.Property(ap => ap.Estado).HasConversion<string>();
@@ -38,6 +45,11 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
                   .WithOne(ec => ec.AlumnoPlan)
                   .HasForeignKey(ec => ec.IdAlumnoPlan)
                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(ap => ap.RecordsPersonales)
+                .WithOne(rp => rp.AlumnoPlan)
+                .HasForeignKey(rp => rp.IdAlumnoPlan)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

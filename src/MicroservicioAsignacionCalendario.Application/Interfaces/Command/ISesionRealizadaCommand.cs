@@ -1,4 +1,5 @@
-﻿using MicroservicioAsignacionCalendario.Domain.Entities;
+﻿using MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento;
+using MicroservicioAsignacionCalendario.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Application.Interfaces.Command
 {
     public interface ISesionRealizadaCommand
     {
-        Task InsertarSesionRealizadaCompleta(SesionRealizada sesion, List<EjercicioRegistro> ejercicios, Guid idAlumno);
+        Task InsertarSesionRealizadaCompleta(SesionRealizada sesion);
     }
 }

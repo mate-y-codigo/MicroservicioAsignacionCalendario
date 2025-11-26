@@ -15,6 +15,9 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             // Referencias
             builder.Property(rp => rp.IdAlumno).HasColumnType("uuid").IsRequired();
             builder.Property(rp => rp.IdEjercicio).HasColumnType("uuid").IsRequired();
+            builder.Property(rp => rp.IdAlumnoPlan).HasColumnType("uuid").IsRequired();
+            builder.Property(rp => rp.IdSesionRealizada).HasColumnType("uuid").IsRequired();
+            builder.Property(rp => rp.IdEjercicioSesion).HasColumnType("uuid").IsRequired();
             
             // Snapshot: Ejercicio
             builder.Property(er => er.NombreEjercicio).HasMaxLength(100).IsRequired();
@@ -30,6 +33,17 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             // Indice para rendimiento
             builder.HasIndex(rp => new { rp.IdAlumno, rp.IdEjercicio })
                   .IsUnique();
+
+            // Relaciones
+            builder.HasOne(rp => rp.AlumnoPlan)
+            .WithMany(ap => ap.RecordsPersonales)
+            .HasForeignKey(rp => rp.IdAlumnoPlan)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(rp => rp.SesionRealizada)
+                .WithMany()
+                .HasForeignKey(rp => rp.IdSesionRealizada)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

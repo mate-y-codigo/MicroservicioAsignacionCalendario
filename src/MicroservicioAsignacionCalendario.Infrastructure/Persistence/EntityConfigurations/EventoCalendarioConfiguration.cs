@@ -15,7 +15,10 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Persistence.EntityCon
             // Referencias
             builder.Property(ec => ec.IdAlumnoPlan).HasColumnType("uuid").IsRequired();
             builder.Property(ec => ec.IdSesionEntrenamiento).HasColumnType("uuid").IsRequired();
-            
+
+            // Snapshots: Sesion de entrenamiento
+            builder.Property(sr => sr.NombreSesion).HasMaxLength(100).IsRequired();
+
             // Otros
             builder.Property(ec => ec.Estado).HasConversion<string>();
             builder.Property(ec => ec.Notas).HasColumnType("text").IsRequired(false);

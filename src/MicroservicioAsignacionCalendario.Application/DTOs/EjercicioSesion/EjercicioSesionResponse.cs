@@ -11,7 +11,7 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.EjercicioSesion
         [Required]
         public int RepeticionesObjetivo { get; set; }
         [Required]
-        public int PesoObjetivo { get; set; }
+        public float PesoObjetivo { get; set; }
         [Required]
         public int Descanso { get; set; }
         [Required]

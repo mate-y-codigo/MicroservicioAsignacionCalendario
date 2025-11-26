@@ -24,7 +24,9 @@ namespace MicroservicioAsignacionCalendario.Application.Mapper
                 .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => EstadoAlumnoPlan.Activo))
                 .ForMember(dest => dest.IdSesionARealizar, opt => opt.Ignore())
                 .ForMember(dest => dest.NombrePlan, opt => opt.Ignore())
-                .ForMember(dest => dest.DescripcionPlan, opt => opt.Ignore());
+                .ForMember(dest => dest.DescripcionPlan, opt => opt.Ignore())
+                .ForMember(dest => dest.TotalSesiones, opt => opt.Ignore())
+                .ForMember(dest => dest.NombreAlumno, opt => opt.Ignore());
             CreateMap<AlumnoPlan, AlumnoPlanResponse>();
 
             // SesionRealizada
@@ -57,10 +59,19 @@ namespace MicroservicioAsignacionCalendario.Application.Mapper
             CreateMap<EjercicioRegistro, EjercicioRegistroResponse>();
 
             // Evento Calendario
-            CreateMap<EventoCalendario, EventoCalendarioResponse>();
+            CreateMap<EventoCalendario, EventoCalendarioResponse>()
+                .ForMember(dest => dest.NombreAlumno, opt => opt.MapFrom(src => src.AlumnoPlan.NombreAlumno));
 
             // RecordPersonal
             CreateMap<RecordPersonal, RecordPersonalResponse>();
+            CreateMap<EjercicioRegistro, RecordPersonal>()
+                .ForMember(dest => dest.IdAlumnoPlan, opt => opt.Ignore())
+                .ForMember(dest => dest.IdAlumno, opt => opt.Ignore())
+                .ForMember(dest => dest.Calculo1RM, opt => opt.Ignore())
+                .ForMember(dest => dest.PesoMax, opt => opt.MapFrom(src => src.Peso))
+                .ForMember(dest => dest.IdSesionRealizada, opt => opt.MapFrom(src => src.IdSesionRealizada))
+                .ForMember(dest => dest.IdEjercicioSesion, opt => opt.MapFrom(src => src.IdEjercicioSesion));
+
         }
     }
 }

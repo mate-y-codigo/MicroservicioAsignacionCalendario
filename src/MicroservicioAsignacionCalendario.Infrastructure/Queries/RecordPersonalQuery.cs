@@ -21,6 +21,12 @@ namespace Infrastructure.Queries
             _context = context;
         }
 
+        public async Task<RecordPersonal?> ObtenerRecordPersonalPorId(Guid idAlumno, Guid IdEjercicio)
+        {
+            return await _context.RecordPersonal.AsNoTracking().Include(r => r.AlumnoPlan)
+                .FirstOrDefaultAsync(r => r.IdAlumno == idAlumno && r.IdEjercicio == IdEjercicio);
+        }
+
         public async Task<List<RecordPersonal>> ObtenerRecordsPersonales(RecordPersonalFilterRequest filtros)
         {
             var query = _context.RecordPersonal.AsNoTracking().AsQueryable();
@@ -37,6 +43,8 @@ namespace Infrastructure.Queries
                 query = query.Where(r => r.FechaRegistro.Date >= filtros.Desde);
             if (filtros.Hasta.HasValue)
                 query = query.Where(r => r.FechaRegistro.Date <= filtros.Hasta);
+
+            query.Include(r => r.IdSesionRealizada);
 
             bool esDescendente = filtros.Orden?.ToLower() == "desc";
 

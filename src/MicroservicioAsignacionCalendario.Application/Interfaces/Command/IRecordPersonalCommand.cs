@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.Command
 {
-    public interface IAlumnoPlanCommand
+    public interface IRecordPersonalCommand
     {
-        Task InsertarAlumnoPlan(AlumnoPlan alumnoPlan);
-        Task ActualizarAlumnoPlan(AlumnoPlan alumnoPlan);
+        Task InsertarRecordPersonal(RecordPersonal record);
+        Task ActualizarRecordPersonal(RecordPersonal record);
     }
 }

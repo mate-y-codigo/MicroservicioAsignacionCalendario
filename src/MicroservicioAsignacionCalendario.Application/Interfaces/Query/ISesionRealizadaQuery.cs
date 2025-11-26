@@ -11,6 +11,7 @@ namespace Application.Interfaces.Query
     public interface ISesionRealizadaQuery
     {
         Task<SesionRealizada> ObtenerSesionRealizadaPorId(Guid id);
+        Task<List<SesionRealizada>> ObtenerSesionesCompletadas(Guid alumnoPlanId);
         Task<List<SesionRealizada>> ObtenerSesionesRealizadas(SesionRealizadaFilterRequest filtros);
     }
 }

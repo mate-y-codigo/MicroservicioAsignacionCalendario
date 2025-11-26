@@ -6,6 +6,8 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan
     {
         [Required]
         public Guid IdAlumno { get; set; }
+        public Guid? IdEntrenador { get; set; }
+        public string? NombreEntrenador { get; set; }
         [Required]
         public Guid IdPlanEntrenamiento { get; set; }
         [Required]

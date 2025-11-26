@@ -7,6 +7,9 @@
         public Guid IdAlumnoPlan { get; set; }
         public Guid IdSesionEntrenamiento { get; set; }
 
+        // Snapshots: Sesion de entrenamiento
+        public string NombreSesion { get; set; } = string.Empty;
+
         // Otros
         public EstadoEvento Estado { get; set; } = EstadoEvento.Programado;
         public string? Notas { get; set; }
