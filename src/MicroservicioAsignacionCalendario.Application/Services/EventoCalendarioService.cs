@@ -19,10 +19,12 @@ namespace Application.Services
             _eventoCommand = eventoCommand;
         }
 
-        public async Task<List<EventoCalendarioResponse>>ObtenerEventosAsync(EventoCalendarioFilterRequest filtros)
+        public async Task<List<EventoCalendarioResponse>> ObtenerEventosAsync(EventoCalendarioFilterRequest filtros)
         {
             throw new NotImplementedException();
         }
+
+
 
         public async Task CrearEventosDePlanAsync(AlumnoPlan alumnoPlan, PlanEntrenamientoResponse plan)
         {
@@ -60,5 +62,49 @@ namespace Application.Services
 
             await _eventoCommand.InsertarEventosCalendario(eventos);
         }
+
+        public async Task CrearPrimerEventoAsync(AlumnoPlan alumnoPlan, string nombreSesion)
+        {
+            var evento = new EventoCalendario
+            {
+                Id = Guid.NewGuid(),
+                IdAlumnoPlan = alumnoPlan.Id,
+                IdSesionEntrenamiento = alumnoPlan.IdSesionARealizar,
+                NombreSesion = nombreSesion,
+                FechaProgramada = alumnoPlan.FechaInicio,
+                Estado = EstadoEvento.Programado,
+                Notas = null
+            };
+
+            await _eventoCommand.InsertarEventoCalendario(evento);
+        }
+
+
+        public async Task CrearSiguienteEventoAsync(AlumnoPlan alumnoPlan, DateTime fechaBase, string nombreSesion)
+        {
+            // nueva fecha 
+            var fechaProgramada = fechaBase
+                .AddDays(alumnoPlan.IntervaloDiasDescanso + 1);
+
+
+            if (fechaProgramada.Date > alumnoPlan.FechaFin.Date)
+                return;
+
+            var nuevoEvento = new EventoCalendario
+            {
+                Id = Guid.NewGuid(),
+                IdAlumnoPlan = alumnoPlan.Id,
+                IdSesionEntrenamiento = alumnoPlan.IdSesionARealizar,
+                NombreSesion = nombreSesion,
+                FechaProgramada = fechaProgramada,
+                Estado = EstadoEvento.Programado,
+                Notas = null
+            };
+
+            await _eventoCommand.InsertarEventoCalendario(nuevoEvento);
+        }
+
+
     }
+
 }

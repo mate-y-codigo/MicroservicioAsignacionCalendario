@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251124232623_init")]
+    [Migration("20251126031939_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -174,6 +174,11 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
 
                     b.Property<Guid>("IdSesionEntrenamiento")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("NombreSesion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Notas")
                         .HasColumnType("text");

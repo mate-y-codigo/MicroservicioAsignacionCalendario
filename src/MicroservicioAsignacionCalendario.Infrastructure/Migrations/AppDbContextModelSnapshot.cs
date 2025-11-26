@@ -172,6 +172,11 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     b.Property<Guid>("IdSesionEntrenamiento")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("NombreSesion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
                     b.Property<string>("Notas")
                         .HasColumnType("text");
 
