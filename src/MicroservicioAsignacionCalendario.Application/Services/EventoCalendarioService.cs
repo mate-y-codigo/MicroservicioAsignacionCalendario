@@ -23,12 +23,6 @@ namespace Application.Services
             _query = query;
         }
 
-        public async Task<List<EventoCalendarioResponse>> ObtenerEventosAsync(EventoCalendarioFilterRequest filtros)
-        {
-            throw new NotImplementedException();
-        }
-
-
 
         public async Task CrearEventosDePlanAsync(AlumnoPlan alumnoPlan, PlanEntrenamientoResponse plan)
         {
@@ -115,10 +109,9 @@ namespace Application.Services
             return eventos.Select(e => new EventoCalendarioResponse
             {
                 Id = e.Id,
-                IdAlumno = e.IdAlumno,
-                IdEntrenador = e.IdEntrenador,
-                IdSesionEntrenamiento = e.IdSesionEntrenamiento,
                 IdAlumnoPlan = e.IdAlumnoPlan,
+                IdSesionEntrenamiento = e.IdSesionEntrenamiento,
+                NombreSesion = e.NombreSesion,
                 FechaProgramada = e.FechaProgramada,
                 Estado = e.Estado,
                 Notas = e.Notas
