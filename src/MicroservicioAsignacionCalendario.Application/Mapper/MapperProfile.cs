@@ -59,7 +59,8 @@ namespace MicroservicioAsignacionCalendario.Application.Mapper
             CreateMap<EjercicioRegistro, EjercicioRegistroResponse>();
 
             // Evento Calendario
-            CreateMap<EventoCalendario, EventoCalendarioResponse>();
+            CreateMap<EventoCalendario, EventoCalendarioResponse>()
+                .ForMember(dest => dest.NombreAlumno, opt => opt.MapFrom(src => src.AlumnoPlan.NombreAlumno));
 
             // RecordPersonal
             CreateMap<RecordPersonal, RecordPersonalResponse>();

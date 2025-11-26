@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Command;
+using Application.Interfaces.EventoCalendario;
 using Application.Interfaces.Query;
 using AutoMapper;
 using Interfaces.Query;
@@ -28,7 +29,10 @@ namespace MicroservicioAsignacionCalendario.Application.Services
         private readonly IMapper _mapper;
         private readonly IPlanEntrenamientoClient _planEntrenamientoClient;
         private readonly IUsuariosClient _usuariosClient;
-        public SesionRealizadaService(ISesionRealizadaQuery query, ISesionRealizadaCommand command, IAlumnoPlanService alumnoPlanService, IAlumnoPlanQuery alumnoPlanQuery, IMapper mapper, IRecordPersonalService recordPersonalService, IPlanEntrenamientoClient plan, IUsuariosClient usuarios)
+        private readonly IEventoCalendarioService _eventoCalendarioService;
+
+
+        public SesionRealizadaService(ISesionRealizadaQuery query, ISesionRealizadaCommand command, IAlumnoPlanQuery alumnoPlanQuery, IMapper mapper, IRecordPersonalService recordPersonalService, IPlanEntrenamientoClient plan, IUsuariosClient usuarios, IEventoCalendarioService eventoCalendarioService, IAlumnoPlanService alumnoPlanService)
         {
             _command = command;
             _query = query;
@@ -38,6 +42,7 @@ namespace MicroservicioAsignacionCalendario.Application.Services
             _recordPersonalService = recordPersonalService;
             _planEntrenamientoClient = plan;
             _usuariosClient = usuarios;
+            _eventoCalendarioService = eventoCalendarioService;
         }
 
         public async Task<SesionRealizadaResponse> InsertarSesionRealizada(SesionRealizadaRequest req)
@@ -107,11 +112,16 @@ namespace MicroservicioAsignacionCalendario.Application.Services
             // Actualizar Progreso del Plan
             await _alumnoPlanService.ActualizarProgresoPlan(alumnoPlan.Id);
 
-            // TO DO: ACTUALIZAR/AGREGAR NUEVO EVENTO CALENDARIO(Siguiente sesion si corresponde)
+            // prox evento calendario
+            await _eventoCalendarioService.CrearSiguienteEventoAsync(
+                alumnoPlan,
+                sesionRealizada.FechaRealizacion ?? DateTime.UtcNow,
+                sesionEntrenamientoPlanificada.Nombre
+            );
 
             return _mapper.Map<SesionRealizadaResponse>(sesionRealizada);
         }
-        
+
         public async Task<List<SesionRealizadaListResponse>> ObtenerSesionesRealizadas(SesionRealizadaFilterRequest filtros)
         {
             //var alumno = await _usuariosClient.ObtenerUsuario(filtros.IdAlumno);

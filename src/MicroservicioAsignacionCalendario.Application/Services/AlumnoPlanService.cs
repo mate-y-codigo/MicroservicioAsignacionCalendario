@@ -6,11 +6,8 @@ using AutoMapper;
 using Interfaces.Query;
 using MicroservicioAsignacionCalendario.Application.CustomExceptions;
 using MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan;
-using MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento;
-using MicroservicioAsignacionCalendario.Application.DTOs.Usuario;
 using MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Clients;
-using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
 using MicroservicioAsignacionCalendario.Domain.Entities;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
@@ -78,13 +75,10 @@ namespace Application.Services
             alumnoPlan.Estado = EstadoAlumnoPlan.Activo;
 
             await _command.InsertarAlumnoPlan(alumnoPlan);
-            // TO DO: Crear un evento Calendario..
-            /* await _eventoCalendarioService.CrearEventosDePlanAsync(alumnoPlan, plan)*/
-
+            await _eventoCalendarioService.CrearPrimerEventoAsync(alumnoPlan, primerSesionEntrenamiento.Nombre);
             return _mapper.Map<AlumnoPlanResponse>(alumnoPlan);
         }
 
-        // TO DO: Implementar método
         public async Task<List<AlumnoPlanResponse>> ObtenerPlanesPorAlumnoAsync(Guid alumnoId)
         {
 
@@ -205,7 +199,6 @@ namespace Application.Services
                 alumnoPlan.Estado = EstadoAlumnoPlan.Finalizado;
             }
 
-            // 4. Solo guardar si hubo cambios
             if (estadoAnterior != alumnoPlan.Estado || idSesionAnterior != alumnoPlan.IdSesionARealizar)
                 await _command.ActualizarAlumnoPlan(alumnoPlan);
         }

@@ -10,6 +10,11 @@ namespace Application.Interfaces.Command
 {
     public interface IEventoCalendarioCommand
     {
+
+        //sacar despues
         Task InsertarEventosCalendario(IEnumerable<MicroservicioAsignacionCalendario.Domain.Entities.EventoCalendario> eventos);
+
+        Task InsertarEventoCalendario(MicroservicioAsignacionCalendario.Domain.Entities.EventoCalendario evento);
+
     }
 }

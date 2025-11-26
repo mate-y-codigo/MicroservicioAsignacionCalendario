@@ -44,6 +44,7 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     IdAlumnoPlan = table.Column<Guid>(type: "uuid", nullable: false),
                     IdSesionEntrenamiento = table.Column<Guid>(type: "uuid", nullable: false),
+                    NombreSesion = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Estado = table.Column<string>(type: "text", nullable: false),
                     Notas = table.Column<string>(type: "text", nullable: true),
                     FechaProgramada = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
