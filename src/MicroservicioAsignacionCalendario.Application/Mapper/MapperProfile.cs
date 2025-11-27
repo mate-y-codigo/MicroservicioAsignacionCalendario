@@ -37,11 +37,7 @@ namespace MicroservicioAsignacionCalendario.Application.Mapper
                 .ForMember(dest => dest.OrdenSesion, opt => opt.Ignore())
                 .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => EstadoSesion.Completado));
             CreateMap<SesionRealizada, SesionRealizadaResponse>();
-            // TO DO: Agregar include alumno plan en la consulta
-            CreateMap<SesionRealizada, SesionRealizadaListResponse>()
-                .ForMember(dest => dest.NombrePlan, opt => opt.MapFrom(src => src.AlumnoPlan.NombrePlan))
-                .ForMember(dest => dest.NombreSesion, opt => opt.MapFrom(src => src.NombreSesion));
-
+            
             // EjercicioRegistro
             CreateMap<EjercicioRegistroRequest, EjercicioRegistro>()
                 .ForMember(dest => dest.IdEjercicioSesion, opt => opt.Ignore())

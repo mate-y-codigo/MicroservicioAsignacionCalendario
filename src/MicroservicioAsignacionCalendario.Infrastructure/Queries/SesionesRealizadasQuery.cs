@@ -35,23 +35,43 @@ namespace Infrastructure.Queries
 
         public async Task<List<SesionRealizada>> ObtenerSesionesRealizadas(SesionRealizadaFilterRequest filtros)
         {
-            throw new NotImplementedException();
-            //var query = _context.SesionRealizada.AsNoTracking().AsQueryable();
 
-            //query = query.Where(s => s.AlumnoPlan.IdAlumno == filtros.IdAlumno);
-            //query = query.Where(s => s.AlumnoPlan.IdPlanEntrenamiento == filtros.IdPlanEntrenamiento);
+            Console.WriteLine($"=== DEBUG FILTROS ===");
+            Console.WriteLine($"IdEntrenador: {filtros.IdEntrenador}");
+            Console.WriteLine($"IdAlumno: {filtros.IdAlumno}");
+            Console.WriteLine($"IdPlanEntrenamiento: {filtros.IdPlanEntrenamiento}");
+            Console.WriteLine($"IdSesionEntrenamiento: {filtros.IdSesionEntrenamiento}");
+            Console.WriteLine($"Desde: {filtros.Desde}, Hasta: {filtros.Hasta}");
+            Console.WriteLine($"=== FIN DEBUG ===");
 
-            //if (filtros.IdSesionEntrenamiento.HasValue)
-            //    query = query.Where(s => s.IdSesionEntrenamiento == filtros.IdSesionEntrenamiento);
+            var query = _context.SesionRealizada
+                .Include(sr => sr.EjerciciosRegistrados)
+                .Include(sr => sr.AlumnoPlan)
+                .AsNoTracking().AsQueryable();
 
-            //if (filtros.Desde.HasValue)
-            //    query = query.Where(s => s.FechaRealizacion.Date >= filtros.Desde);
+            var idAlumno = string.IsNullOrEmpty(filtros.IdAlumno?.ToString()) ? Guid.Empty : filtros.IdAlumno.Value;
+            var idPlan = string.IsNullOrEmpty(filtros.IdPlanEntrenamiento?.ToString()) ? Guid.Empty : filtros.IdPlanEntrenamiento.Value;
+            var idSesion = string.IsNullOrEmpty(filtros.IdSesionEntrenamiento?.ToString()) ? Guid.Empty : filtros.IdSesionEntrenamiento.Value;
 
-            //if (filtros.Hasta.HasValue)
-            //    query = query.Where(s => s.FechaRealizacion.Date <= filtros.Hasta);
+            query = query.Where(sr => sr.AlumnoPlan.IdEntrenador == filtros.IdEntrenador);
 
-            //query = query.OrderByDescending(s => s.FechaRealizacion);
-            //return await query.ToListAsync();
+            if(idAlumno != Guid.Empty)
+                query = query.Where(sr => sr.AlumnoPlan.IdAlumno == filtros.IdAlumno);
+
+            if(idPlan != Guid.Empty)
+                query = query.Where(sr => sr.AlumnoPlan.IdPlanEntrenamiento == filtros.IdPlanEntrenamiento);
+
+            if (idSesion != Guid.Empty)
+                query = query.Where(s => s.IdSesionEntrenamiento == filtros.IdSesionEntrenamiento);
+
+            if (filtros.Desde.HasValue)
+                query = query.Where(s => s.FechaRealizacion >= filtros.Desde);
+
+            if (filtros.Hasta.HasValue)
+                query = query.Where(s => s.FechaRealizacion <= filtros.Hasta);
+
+            query = query.OrderByDescending(s => s.FechaRealizacion);
+            return await query.ToListAsync();
         }
     }
 }

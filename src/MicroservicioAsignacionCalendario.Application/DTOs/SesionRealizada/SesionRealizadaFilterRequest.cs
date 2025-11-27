@@ -10,9 +10,9 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.SesionRealizada
     public class SesionRealizadaFilterRequest
     {
         [Required]
-        public Guid IdAlumno { get; set; }
-        [Required]
-        public Guid IdPlanEntrenamiento { get; set; }
+        public Guid IdEntrenador { get; set; }
+        public Guid? IdAlumno { get; set; }
+        public Guid? IdPlanEntrenamiento { get; set; }
         public Guid? IdSesionEntrenamiento { get; set; }
         public DateTime? Desde { get; set; }
         public DateTime? Hasta { get; set; }
