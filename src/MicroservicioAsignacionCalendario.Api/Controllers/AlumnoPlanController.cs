@@ -27,8 +27,13 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AsignarPlan([FromHeader(Name = "Authorization")] string authorizationHeader, [FromBody] AlumnoPlanRequest request)
         {
+            Console.WriteLine("Token recibido:");
             var token = Request.ExtraerToken();
             Console.WriteLine($"Token: {token}");
+            Console.WriteLine("=== CLAIMS ===");
+            foreach (var claim in User.Claims)
+                Console.WriteLine($"{claim.Type} = {claim.Value}");
+            Console.WriteLine("===============");
             if (string.IsNullOrEmpty(token))
                 return Unauthorized(new ApiError { Message = "Token de autorización ausente o mal formado." });
 
@@ -77,7 +82,8 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
             {
                 return BadRequest(new ApiError { Message = ex.Message });
             }
-            catch (NotFoundException ex) {
+            catch (NotFoundException ex)
+            {
                 return NotFound(new ApiError { Message = ex.Message });
             }
         }

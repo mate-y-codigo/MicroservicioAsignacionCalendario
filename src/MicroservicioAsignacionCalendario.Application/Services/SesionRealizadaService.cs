@@ -82,7 +82,22 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 if (sesionEjercicioDetalle == null)
                     throw new NotFoundException($"El ejercicio de sesión con Id {idSesionEjercicio} no existe.");
 
+
+                Console.WriteLine("=== DEBUG EJERCICIO DETALLE ===");
+                Console.WriteLine($"IdEjercicioSesion: {sesionEjercicioDetalle?.Id}");
+                Console.WriteLine($"NombreEjercicio: {sesionEjercicioDetalle?.Ejercicio?.Nombre}");
+                Console.WriteLine($"Musculo: {sesionEjercicioDetalle?.Ejercicio?.Musculo?.Nombre}");
+                Console.WriteLine($"GrupoMuscular: {sesionEjercicioDetalle?.Ejercicio?.Musculo?.GrupoMuscular?.Nombre}");
+                Console.WriteLine($"Categoria: {sesionEjercicioDetalle?.Ejercicio?.Categoria?.Nombre}");
+                Console.WriteLine("===============================");
                 var nuevoEjercicioRegistro = _mapper.Map<EjercicioRegistro>(ej);
+
+                Console.WriteLine("=== DEBUG REGISTRO DESPUÉS DE MAPEAR ===");
+                Console.WriteLine($"NombreEjercicio: {nuevoEjercicioRegistro.NombreEjercicio}");
+                Console.WriteLine($"NombreMusculo: {nuevoEjercicioRegistro.NombreMusculo}");
+                Console.WriteLine($"NombreGrupoMuscular: {nuevoEjercicioRegistro.NombreGrupoMuscular}");
+                Console.WriteLine($"NombreCategoria: {nuevoEjercicioRegistro.NombreCategoria}");
+                Console.WriteLine("=========================================");
 
                 // Snapshots desde EjercicioSesion y SesionEntrenamiento
                 nuevoEjercicioRegistro.IdEjercicioSesion = sesionEjercicioDetalle.Id;
@@ -93,11 +108,12 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 nuevoEjercicioRegistro.FechaRealizacion = sesionRealizada.FechaRealizacion ?? DateTime.UtcNow;
 
                 // Snapshots desde Ejercicio
-                nuevoEjercicioRegistro.NombreEjercicio = sesionEjercicioDetalle.Ejercicio.Nombre;
-                nuevoEjercicioRegistro.NombreMusculo = sesionEjercicioDetalle.Ejercicio.Musculo.Nombre;
-                nuevoEjercicioRegistro.NombreGrupoMuscular = sesionEjercicioDetalle.Ejercicio.Musculo.GrupoMuscular.Nombre;
-                nuevoEjercicioRegistro.NombreCategoria = sesionEjercicioDetalle.Ejercicio.Categoria.Nombre;
-                nuevoEjercicioRegistro.UrlDemoEjercicio = sesionEjercicioDetalle.Ejercicio.UrlDemo;
+                nuevoEjercicioRegistro.NombreMusculo = nuevoEjercicioRegistro.NombreMusculo ?? "Sin datos";
+                nuevoEjercicioRegistro.NombreGrupoMuscular = nuevoEjercicioRegistro.NombreGrupoMuscular ?? "Sin datos";
+                nuevoEjercicioRegistro.NombreCategoria = nuevoEjercicioRegistro.NombreCategoria ?? "Sin datos";
+                nuevoEjercicioRegistro.NombreEjercicio = nuevoEjercicioRegistro.NombreEjercicio ?? "Ejercicio";
+                nuevoEjercicioRegistro.UrlDemoEjercicio = nuevoEjercicioRegistro.UrlDemoEjercicio ?? "";
+
 
                 sesionRealizada.EjerciciosRegistrados.Add(nuevoEjercicioRegistro);
             }
