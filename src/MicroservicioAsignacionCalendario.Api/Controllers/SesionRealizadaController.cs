@@ -1,7 +1,10 @@
-﻿using MicroservicioAsignacionCalendario.Application.CustomExceptions;
+﻿using MicroservicioAsignacionCalendario.Api.Helpers;
+using MicroservicioAsignacionCalendario.Application.CustomExceptions;
 using MicroservicioAsignacionCalendario.Application.DTOs.SesionRealizada;
 using MicroservicioAsignacionCalendario.Application.Interfaces.SesionRealizada;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace MicroservicioAsignacionCalendario.Api.Controllers
 {
@@ -37,11 +40,23 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(typeof(List<SesionRealizadaResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ObtenerSesionesRealizadas([FromQuery] SesionRealizadaFilterRequest filtros)
+        public async Task<IActionResult> ObtenerSesionesRealizadas([FromHeader(Name = "Authorization")] string authorizationHeader, [FromQuery] SesionRealizadaFilterRequest filtros)
         {
+            var token = Request.ExtraerToken();
+            if (string.IsNullOrEmpty(token))
+                return Unauthorized(new ApiError { Message = "Token de autorización ausente o mal formado." });
+
+            var entrenadorIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(entrenadorIdString) || !Guid.TryParse(entrenadorIdString, out var entrenadorId))
+                return Unauthorized(new ApiError { Message = "Token inválido: no contiene ID de usuario válido." });
+
+            Console.WriteLine($"Entrenador ID desde token: {entrenadorId}");
+            filtros.IdEntrenador = entrenadorId;
             try
             {
                 var result = await _service.ObtenerSesionesRealizadas(filtros);

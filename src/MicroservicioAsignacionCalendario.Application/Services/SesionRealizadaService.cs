@@ -31,7 +31,6 @@ namespace MicroservicioAsignacionCalendario.Application.Services
         private readonly IUsuariosClient _usuariosClient;
         private readonly IEventoCalendarioService _eventoCalendarioService;
 
-
         public SesionRealizadaService(ISesionRealizadaQuery query, ISesionRealizadaCommand command, IAlumnoPlanQuery alumnoPlanQuery, IMapper mapper, IRecordPersonalService recordPersonalService, IPlanEntrenamientoClient plan, IUsuariosClient usuarios, IEventoCalendarioService eventoCalendarioService, IAlumnoPlanService alumnoPlanService)
         {
             _command = command;
@@ -122,37 +121,38 @@ namespace MicroservicioAsignacionCalendario.Application.Services
             return _mapper.Map<SesionRealizadaResponse>(sesionRealizada);
         }
 
-        public async Task<List<SesionRealizadaListResponse>> ObtenerSesionesRealizadas(SesionRealizadaFilterRequest filtros)
+        public async Task<List<SesionRealizadaResponse>> ObtenerSesionesRealizadas(SesionRealizadaFilterRequest filtros)
         {
-            //var alumno = await _usuariosClient.ObtenerUsuario(filtros.IdAlumno);
-            //if (alumno == null)
-            //    throw new NotFoundException($"El alumno con Id {filtros.IdAlumno} no existe.");
+            if (filtros.IdAlumno.HasValue && filtros.IdAlumno != Guid.Empty)
+            {
+                var alumno = await _usuariosClient.ObtenerUsuario(filtros.IdAlumno.Value);
+                if (alumno == null)
+                    throw new NotFoundException("El alumno no existe");
+            }
 
-            var planEntrenamiento = await _planEntrenamientoClient.ObtenerPlanEntrenamiento(filtros.IdPlanEntrenamiento);
-            if (planEntrenamiento == null)
-                throw new NotFoundException($"El plan de entrenamiento con Id {filtros.IdPlanEntrenamiento} no existe.");
+            if (filtros.IdPlanEntrenamiento.HasValue && filtros.IdPlanEntrenamiento != Guid.Empty)
+            {
+                var planEntrenamiento = await _planEntrenamientoClient.ObtenerPlanEntrenamiento(filtros.IdPlanEntrenamiento.Value);
+                if (planEntrenamiento == null)
+                    throw new NotFoundException($"El plan de entrenamiento con Id {filtros.IdPlanEntrenamiento} no existe.");
+            }
+
+            if (filtros.IdSesionEntrenamiento.HasValue && filtros.IdSesionEntrenamiento != Guid.Empty)
+            {
+                var sesionEntrenamiento = await _planEntrenamientoClient.ObtenerSesionEntrenamiento(filtros.IdSesionEntrenamiento.Value);
+                if (sesionEntrenamiento == null)
+                    throw new NotFoundException($"La sesion de entrenamiento con Id {filtros.IdSesionEntrenamiento} no existe.");
+            }
 
             if (filtros.Desde.HasValue && filtros.Hasta.HasValue && filtros.Desde.Value > filtros.Hasta.Value)
                 throw new BadRequestException("Rango de fechas inválido");
 
             var sesiones = await _query.ObtenerSesionesRealizadas(filtros);
+            Console.WriteLine(sesiones);
             if (sesiones == null || !sesiones.Any())
-                return new List<SesionRealizadaListResponse>();
+                return new List<SesionRealizadaResponse>();
 
-            var result = _mapper.Map<List<SesionRealizadaListResponse>>(sesiones);
-            var nombrePlan = planEntrenamiento.Nombre;
-            var sesionesDict = planEntrenamiento.SesionesEntrenamiento.ToDictionary(s => s.Id);
-
-            foreach (var sesionDto in result)
-            {
-                sesionDto.NombrePlan = nombrePlan;
-
-                if (sesionesDict.TryGetValue(sesionDto.IdSesionEntrenamiento, out var sesionInfo))
-                {
-                    sesionDto.NombreSesion = sesionInfo.Nombre;
-                }
-            }
-
+            var result = _mapper.Map<List<SesionRealizadaResponse>>(sesiones);
             return result;
         }
     }
