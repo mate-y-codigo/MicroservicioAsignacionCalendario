@@ -21,8 +21,8 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
         [ProducesResponseType(typeof(ApiError), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ObtenerEventos([FromQuery] EventoCalendarioFilterRequest filtros)
         {
-            var result = await _service.ObtenerEventosAsync(filtros);
-            return Ok(result);
+            var eventos = await _service.ObtenerEventosAsync(filtros);
+            return Ok(eventos);
         }
     }
 }

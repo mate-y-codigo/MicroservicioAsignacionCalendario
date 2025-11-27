@@ -6,6 +6,7 @@ using Application.Interfaces.Command;
 using Application.Interfaces.EventoCalendario;
 using MicroservicioAsignacionCalendario.Application.DTOs.EventoCalendario;
 using MicroservicioAsignacionCalendario.Application.DTOs.PlanEntrenamiento;
+using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
 using MicroservicioAsignacionCalendario.Domain.Entities;
 
 namespace Application.Services
@@ -13,17 +14,14 @@ namespace Application.Services
     public class EventoCalendarioService : IEventoCalendarioService
     {
         private readonly IEventoCalendarioCommand _eventoCommand;
+        private readonly IEventoCalendarioQuery _query;
 
-        public EventoCalendarioService(IEventoCalendarioCommand eventoCommand)
+
+        public EventoCalendarioService(IEventoCalendarioCommand eventoCommand, IEventoCalendarioQuery query)
         {
             _eventoCommand = eventoCommand;
+            _query = query;
         }
-
-        public async Task<List<EventoCalendarioResponse>> ObtenerEventosAsync(EventoCalendarioFilterRequest filtros)
-        {
-            throw new NotImplementedException();
-        }
-
 
 
         public async Task CrearEventosDePlanAsync(AlumnoPlan alumnoPlan, PlanEntrenamientoResponse plan)
@@ -102,6 +100,22 @@ namespace Application.Services
             };
 
             await _eventoCommand.InsertarEventoCalendario(nuevoEvento);
+        }
+
+        public async Task<List<EventoCalendarioResponse>> ObtenerEventosAsync(EventoCalendarioFilterRequest filtros)
+        {
+            var eventos = await _query.ObtenerEventos(filtros);
+
+            return eventos.Select(e => new EventoCalendarioResponse
+            {
+                Id = e.Id,
+                IdAlumnoPlan = e.IdAlumnoPlan,
+                IdSesionEntrenamiento = e.IdSesionEntrenamiento,
+                NombreSesion = e.NombreSesion,
+                FechaProgramada = e.FechaProgramada,
+                Estado = e.Estado,
+                Notas = e.Notas
+            }).ToList();
         }
 
 
