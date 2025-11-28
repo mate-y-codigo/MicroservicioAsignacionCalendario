@@ -41,6 +41,7 @@ namespace Application.Services
                 var sesion = sesiones[idx];
                 var evento = new EventoCalendario
                 {
+                    //agregar nombre alumno
                     Id = Guid.NewGuid(),
                     //IdAlumno = alumnoPlan.IdAlumno,
                     //IdEntrenador = plan.IdEntrenador,

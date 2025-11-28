@@ -9,12 +9,14 @@ using Interfaces.Query;
 using MicroservicioAsignacionCalendario.Api.Auth;
 using MicroservicioAsignacionCalendario.Application.Interfaces.AlumnoPlan;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Clients;
+using MicroservicioAsignacionCalendario.Application.Interfaces.metrics;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
 using MicroservicioAsignacionCalendario.Application.Interfaces.RecordPersonal;
 using MicroservicioAsignacionCalendario.Application.Interfaces.RegistroEjercicio;
 using MicroservicioAsignacionCalendario.Application.Interfaces.SesionRealizada;
 using MicroservicioAsignacionCalendario.Application.Mapper;
 using MicroservicioAsignacionCalendario.Application.Services;
+using MicroservicioAsignacionCalendario.Application.Services.metrics;
 using MicroservicioAsignacionCalendario.Infrastructure.Clients;
 using MicroservicioAsignacionCalendario.Infrastructure.Commands;
 using MicroservicioAsignacionCalendario.Infrastructure.Data;
@@ -72,6 +74,9 @@ builder.Services.AddScoped<IEjercicioRegistroService, EjercicioRegistroService>(
 builder.Services.AddScoped<IEventoCalendarioService, EventoCalendarioService>();
 builder.Services.AddScoped<IRecordPersonalService, RecordPersonalService>();
 builder.Services.AddScoped<ISesionRealizadaService, SesionRealizadaService>();
+builder.Services.AddScoped<IMetricsService, MetricsService>();
+
+
 
 // To access HttpContext in services
 builder.Services.AddHttpContextAccessor();
