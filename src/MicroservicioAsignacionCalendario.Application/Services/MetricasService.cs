@@ -17,7 +17,7 @@ namespace MicroservicioAsignacionCalendario.Application.Services
 
         public Task<MetricaResponseDto> GetMetricasAlumnoAsync(Guid idAlumno, DateTime desde, DateTime hasta)
         {
-            // Si Alumno = Entrenador en tu modelo: usar el mismo método
+
             return GetMetricasGrupalesAsync(idAlumno, desde, hasta);
         }
 
