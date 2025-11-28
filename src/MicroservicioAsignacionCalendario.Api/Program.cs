@@ -72,7 +72,9 @@ builder.Services.AddScoped<IEjercicioRegistroService, EjercicioRegistroService>(
 builder.Services.AddScoped<IEventoCalendarioService, EventoCalendarioService>();
 builder.Services.AddScoped<IRecordPersonalService, RecordPersonalService>();
 builder.Services.AddScoped<ISesionRealizadaService, SesionRealizadaService>();
+builder.Services.AddScoped<IMetricsQuery, MetricsQuery>();
 builder.Services.AddScoped<IMetricsService, MetricsService>();
+
 
 
 

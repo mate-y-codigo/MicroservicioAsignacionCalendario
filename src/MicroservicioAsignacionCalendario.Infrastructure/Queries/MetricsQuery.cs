@@ -1,12 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MicroservicioAsignacionCalendario.Infrastructure.Data;
-
-// ENTIDADES
 using MicroservicioAsignacionCalendario.Domain.Entities;
-
 using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
-using Interfaces.Query;
-
 
 
 namespace MicroservicioAsignacionCalendario.Infrastructure.Queries
