@@ -1,6 +1,9 @@
 using System.Globalization;
+
 using MicroservicioAsignacionCalendario.Application.DTOs.metricas;
-using MicroservicioAsignacionCalendario.Application.Interfaces.metrics;
+using Interfaces.Query;
+using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
+
 
 namespace MicroservicioAsignacionCalendario.Application.Services
 {

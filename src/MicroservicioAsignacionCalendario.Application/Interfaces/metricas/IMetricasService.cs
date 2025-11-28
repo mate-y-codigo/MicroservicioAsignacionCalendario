@@ -1,6 +1,6 @@
 using MicroservicioAsignacionCalendario.Application.DTOs.metricas;
 
-namespace MicroservicioAsignacionCalendario.Application.Interfaces.metrics
+namespace MicroservicioAsignacionCalendario.Application.Interfaces.Query
 {
     public interface IMetricsService
     {

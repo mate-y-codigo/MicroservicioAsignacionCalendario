@@ -1,12 +1,8 @@
 
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 using MicroservicioAsignacionCalendario.Domain.Entities;
 
-
-namespace MicroservicioAsignacionCalendario.Application.Interfaces.metrics
+namespace Interfaces.Query
 {
     public interface IMetricsQuery
     {

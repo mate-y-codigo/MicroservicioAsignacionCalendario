@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MicroservicioAsignacionCalendario.Application.Interfaces.metrics;
+using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
 using MicroservicioAsignacionCalendario.Application.DTOs.metricas;
+
+
 
 namespace MicroservicioAsignacionCalendario.Api.Controllers
 {
@@ -19,14 +21,13 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
         [Authorize(Roles = "Entrenador")]
         [HttpGet("grupales")]
         public async Task<ActionResult<MetricaResponseDto>> GetGrupales(
-    [FromQuery] Guid idEntrenador,
-    [FromQuery] DateTime desde,
-    [FromQuery] DateTime hasta)
+            [FromQuery] Guid idEntrenador,
+            [FromQuery] DateTime desde,
+            [FromQuery] DateTime hasta)
         {
             var result = await _metricsService.GetMetricasGrupalesAsync(idEntrenador, desde, hasta);
             return Ok(result);
         }
-
 
         [Authorize(Roles = "Entrenador")]
         [HttpGet("alumno/{idAlumno}")]
@@ -35,7 +36,6 @@ namespace MicroservicioAsignacionCalendario.Api.Controllers
             [FromQuery] DateTime desde,
             [FromQuery] DateTime hasta)
         {
-            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             var result = await _metricsService.GetMetricasAlumnoAsync(idAlumno, desde, hasta);
             return Ok(result);
         }

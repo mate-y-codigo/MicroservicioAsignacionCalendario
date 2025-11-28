@@ -4,8 +4,8 @@ using MicroservicioAsignacionCalendario.Infrastructure.Data;
 // ENTIDADES
 using MicroservicioAsignacionCalendario.Domain.Entities;
 
-// INTERFAZ CORRECTA
-using MicroservicioAsignacionCalendario.Application.Interfaces.metrics;
+using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
+using Interfaces.Query;
 
 
 
@@ -44,7 +44,8 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Queries
                 .Where(e =>
                     e.FechaRealizacion >= desde &&
                     e.FechaRealizacion <= hasta &&
-                    _context.AlumnoPlan.Any(p => p.Id == e.IdAlumnoPlan &&
+                    _context.AlumnoPlan.Any(p => p.Id == e.SesionRealizada.IdAlumnoPlan
+ &&
                                                  p.IdEntrenador == idEntrenador))
                 .ToListAsync();
         }
