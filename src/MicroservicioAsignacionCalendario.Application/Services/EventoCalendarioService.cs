@@ -112,6 +112,7 @@ namespace Application.Services
                 IdAlumnoPlan = e.IdAlumnoPlan,
                 IdSesionEntrenamiento = e.IdSesionEntrenamiento,
                 NombreSesion = e.NombreSesion,
+                NombreAlumno = e.AlumnoPlan.NombreAlumno,
                 FechaProgramada = e.FechaProgramada,
                 Estado = e.Estado,
                 Notas = e.Notas
