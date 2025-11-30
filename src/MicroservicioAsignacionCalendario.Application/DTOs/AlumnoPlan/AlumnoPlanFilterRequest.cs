@@ -14,6 +14,6 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.AlumnoPlan
         public Guid? IdPlanEntrenamiento { get; set; }
         public DateTime? Desde { get; set; }
         public DateTime? Hasta { get; set; }
-        public EstadoAlumnoPlan? Estado { get; set; } = EstadoAlumnoPlan.Activo;
+        public EstadoAlumnoPlan? Estado { get; set; } 
     }
 }

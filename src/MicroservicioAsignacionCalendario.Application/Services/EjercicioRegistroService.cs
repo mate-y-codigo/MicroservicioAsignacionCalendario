@@ -29,16 +29,8 @@ namespace MicroservicioAsignacionCalendario.Application.Services
         // TO DO: Implementar método
         public async Task<List<EjercicioRegistroResponse>> ObtenerRegistrosAsync(EjercicioRegistroFilterRequest filtros)
         {
-            // faltan arreglar un par de cosas, si se ponen todos los datos funciona
-
-
-            var user = await _usuariosClient.ObtenerUsuario(filtros.IdAlumno.Value);
-              
-                if (user.RolId != 3)
-                    throw new BadRequestException("El usuario ingresado no es alumno");
-
-            var sesion = await _planEntrenamientoClient.ObtenerSesionEntrenamiento(filtros.IdSesionEntrenamiento.Value);
-
+            // funciona, se podria intentar validar los datos del front, pero si ya se pide como guid mismo asp lo hace saltar
+            
             var query = await _ejercicioRegistroQuery.ObtenerEjerciciosRegistros(filtros);
 
             var lista = new List<EjercicioRegistroResponse>();
