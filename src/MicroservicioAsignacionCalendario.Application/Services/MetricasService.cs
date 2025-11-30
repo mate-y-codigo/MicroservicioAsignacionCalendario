@@ -25,25 +25,19 @@ namespace MicroservicioAsignacionCalendario.Application.Services
         public async Task<MetricaResponseDto> GetMetricasGrupalesAsync(
             Guid idEntrenador, DateTime desde, DateTime hasta)
         {
-            // ============================
+
             //  1. Obtener datos reales
-            // ============================
+
             var planes = await _metricsQuery.GetPlanesDelEntrenadorAsync(idEntrenador);
             var sesiones = await _metricsQuery.GetSesionesRealizadasAsync(idEntrenador, desde, hasta);
             var ejercicios = await _metricsQuery.GetEjerciciosRegistradosAsync(idEntrenador, desde, hasta);
             var eventos = await _metricsQuery.GetEventosProgramadosAsync(idEntrenador, desde, hasta);
             var records = await _metricsQuery.GetRecordsPersonalesAsync(idEntrenador, desde, hasta);
 
-            // ============================
-            //  2. Cumplimiento global
-            // ============================
-            var prog = ejercicios.Count;
-            var comp = ejercicios.Count(e => e.Series >= e.SeriesObjetivo);
-            double cumplimientoGlobal = prog == 0 ? 0 : (double)comp / prog * 100;
 
-            // ============================
-            //  3. Carga semanal (kg totales)
-            // ============================
+
+            //   Carga semanal (kg totales)
+
             var loadData = ejercicios
                 .GroupBy(e => GetSemanaRelativa(e.FechaRealizacion, desde))
                 .Select(g => new LoadDataDto
@@ -53,9 +47,8 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 })
                 .ToList();
 
-            // ============================
+
             //  4. Fuerza (1RM promedio)
-            // ============================
             var strengthData = ejercicios
                 .Select(e => new
                 {
@@ -104,9 +97,6 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 .ToList();
 
 
-
-
-
             //  6. Weekly Compliance (L-M-X-J-V-S-D)
             DateTime inicioSemana = desde.Date;
             DateTime finSemana = inicioSemana.AddDays(6); // siempre 7 días exactos
@@ -153,11 +143,7 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 .ToList();
 
 
-
-
-
             //  7. Session Gap (días entre sesiones)
-
             var orderedSessions = sesiones
                 .Where(s => s.FechaRealizacion != null)
                 .OrderBy(s => s.FechaRealizacion)
@@ -194,7 +180,7 @@ namespace MicroservicioAsignacionCalendario.Application.Services
 
             // PERIODOS
 
-            var prevDesde = desde.AddMonths(-3);
+            var prevDesde = desde.AddMonths(-1);
             var prevHasta = desde;
 
 
@@ -237,14 +223,15 @@ namespace MicroservicioAsignacionCalendario.Application.Services
             double cargaPrev = ejerciciosPrev.Sum(e => (double)e.Peso * e.Series * e.Repeticiones);
 
             // delta
-            double deltaCarga = cargaPrev == 0
-                ? cargaActual
-                : ((cargaActual - cargaPrev) / Math.Abs(cargaPrev)) * 100;
+            double deltaCarga =
+                (cargaPrev == 0 && cargaActual == 0)
+                    ? 0
+                    : (cargaPrev == 0 && cargaActual > 0)
+                        ? 100
+                        : ((cargaActual - cargaPrev) / Math.Abs(cargaPrev)) * 100;
 
 
             // 3) PROGRESO FUERZA (1 RM PROMEDIO)
-
-
             // actual
             double fuerzaActual = ejerciciosActual
                 .Select(e => (double)(e.Peso * (1m + 0.0333m * e.Repeticiones)))
@@ -276,14 +263,14 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 {
                     Title = "Carga Total Semanal",
                     Value = $"{(cargaActual / 1000):0.0}k kg",
-                    Delta = $"{deltaCarga:+0.0;-0.0;0}%",
+                    Delta = $"{deltaCarga:+0.0;-0.0;0.0}%",
                     Color = deltaCarga >= 0 ? "#06b6d4" : "#dc2626"
                 },
                 new()
                 {
                     Title = "Progreso Fuerza",
                     Value = $"{fuerzaActual:0}",
-                    Delta = $"{deltaFuerza:+0.0;-0.0;0}%",
+                    Delta = $"{deltaFuerza:+0.0;-0.0;0.0}%",
                     Color = deltaFuerza >= 0 ? "#10b981" : "#dc2626"
                 }
             };
