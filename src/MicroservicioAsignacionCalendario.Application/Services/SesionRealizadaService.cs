@@ -63,8 +63,8 @@ namespace MicroservicioAsignacionCalendario.Application.Services
             sesionRealizada.Estado = EstadoSesion.Completado;
             sesionRealizada.NombreSesion = sesionEntrenamientoPlanificada.Nombre;
             sesionRealizada.OrdenSesion = sesionEntrenamientoPlanificada.Orden;
-            sesionRealizada.PesoCorporalAlumno = alumno.Peso;
-            sesionRealizada.AlturaEnCmAlumno = alumno.Altura;
+            sesionRealizada.PesoCorporalAlumno = req.PesoCorporalAlumno;
+            sesionRealizada.AlturaEnCmAlumno = req.AlturaEnCmAlumno;
 
             sesionRealizada.EjerciciosRegistrados = new List<EjercicioRegistro>();
             foreach (var ej in req.RegistroEjercicios)

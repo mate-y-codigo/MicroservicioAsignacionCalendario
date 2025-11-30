@@ -23,13 +23,20 @@ namespace Infrastructure.Queries
 
         public async Task<RecordPersonal?> ObtenerRecordPersonalPorId(Guid idAlumno, Guid IdEjercicio)
         {
-            return await _context.RecordPersonal.AsNoTracking().Include(r => r.AlumnoPlan)
+            return await _context.RecordPersonal
+                .Include(r => r.AlumnoPlan)
+                .Include(r => r.SesionRealizada)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(r => r.IdAlumno == idAlumno && r.IdEjercicio == IdEjercicio);
         }
 
         public async Task<List<RecordPersonal>> ObtenerRecordsPersonales(RecordPersonalFilterRequest filtros)
         {
-            var query = _context.RecordPersonal.AsNoTracking().AsQueryable();
+            var query = _context.RecordPersonal
+                .Include(r => r.AlumnoPlan)
+                .Include(r => r.SesionRealizada)
+                .AsNoTracking().AsQueryable();
+
             var idAlumno = string.IsNullOrEmpty(filtros.IdAlumno?.ToString()) ? Guid.Empty : filtros.IdAlumno.Value;
             var idEjercicio = string.IsNullOrEmpty(filtros.IdEjercicio?.ToString()) ? Guid.Empty : filtros.IdEjercicio.Value;
 
@@ -44,8 +51,6 @@ namespace Infrastructure.Queries
 
             if (filtros.Hasta.HasValue)
                 query = query.Where(r => r.FechaRegistro.Date <= filtros.Hasta);
-
-            query.Include(r => r.SesionRealizada);
 
             return await query.ToListAsync();
         }

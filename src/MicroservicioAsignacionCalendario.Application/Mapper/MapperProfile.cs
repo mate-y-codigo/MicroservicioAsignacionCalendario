@@ -60,12 +60,14 @@ namespace MicroservicioAsignacionCalendario.Application.Mapper
                 .ForMember(dest => dest.NombreAlumno, opt => opt.MapFrom(src => src.AlumnoPlan.NombreAlumno));
 
             // RecordPersonal
-            CreateMap<RecordPersonal, RecordPersonalResponse>();
+            CreateMap<RecordPersonal, RecordPersonalResponse>()
+                .ForMember(dest => dest.PesoCorporalAlumno, opt => opt.MapFrom(src => src.SesionRealizada.PesoCorporalAlumno));
             CreateMap<EjercicioRegistro, RecordPersonal>()
                 .ForMember(dest => dest.IdAlumnoPlan, opt => opt.Ignore())
                 .ForMember(dest => dest.IdAlumno, opt => opt.Ignore())
                 .ForMember(dest => dest.Calculo1RM, opt => opt.Ignore())
                 .ForMember(dest => dest.PesoMax, opt => opt.MapFrom(src => src.Peso))
+                .ForMember(dest => dest.FechaRegistro, opt => opt.MapFrom(src => src.FechaRealizacion))
                 .ForMember(dest => dest.IdSesionRealizada, opt => opt.MapFrom(src => src.IdSesionRealizada))
                 .ForMember(dest => dest.IdEjercicioSesion, opt => opt.MapFrom(src => src.IdEjercicioSesion));
 

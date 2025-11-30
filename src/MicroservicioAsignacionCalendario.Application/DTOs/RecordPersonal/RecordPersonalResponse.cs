@@ -13,5 +13,6 @@
         public int Repeticiones { get; set; }
         public DateTime FechaRegistro { get; set; }
         public decimal Calculo1RM { get; set; }
+        public decimal PesoCorporalAlumno { get; set; }
     }
 }
