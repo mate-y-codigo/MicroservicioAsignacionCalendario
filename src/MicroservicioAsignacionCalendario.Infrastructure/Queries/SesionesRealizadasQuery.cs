@@ -35,15 +35,6 @@ namespace Infrastructure.Queries
 
         public async Task<List<SesionRealizada>> ObtenerSesionesRealizadas(SesionRealizadaFilterRequest filtros)
         {
-
-            Console.WriteLine($"=== DEBUG FILTROS ===");
-            Console.WriteLine($"IdEntrenador: {filtros.IdEntrenador}");
-            Console.WriteLine($"IdAlumno: {filtros.IdAlumno}");
-            Console.WriteLine($"IdPlanEntrenamiento: {filtros.IdPlanEntrenamiento}");
-            Console.WriteLine($"IdSesionEntrenamiento: {filtros.IdSesionEntrenamiento}");
-            Console.WriteLine($"Desde: {filtros.Desde}, Hasta: {filtros.Hasta}");
-            Console.WriteLine($"=== FIN DEBUG ===");
-
             var query = _context.SesionRealizada
                 .Include(sr => sr.EjerciciosRegistrados)
                 .Include(sr => sr.AlumnoPlan)

@@ -30,36 +30,22 @@ namespace Infrastructure.Queries
         public async Task<List<RecordPersonal>> ObtenerRecordsPersonales(RecordPersonalFilterRequest filtros)
         {
             var query = _context.RecordPersonal.AsNoTracking().AsQueryable();
+            var idAlumno = string.IsNullOrEmpty(filtros.IdAlumno?.ToString()) ? Guid.Empty : filtros.IdAlumno.Value;
+            var idEjercicio = string.IsNullOrEmpty(filtros.IdEjercicio?.ToString()) ? Guid.Empty : filtros.IdEjercicio.Value;
 
-            query = query.Where(r => r.IdAlumno == filtros.IdAlumno);
-            
-            if (filtros.IdEjercicio.HasValue)
+            if (idAlumno != Guid.Empty)
+                query = query.Where(r => r.IdAlumno == filtros.IdAlumno);
+
+            if (idEjercicio != Guid.Empty)
                 query = query.Where(r => r.IdEjercicio == filtros.IdEjercicio);
-            //if (filtros.PesoMinimo.HasValue)
-            //    query = query.Where(r => r.PesoMax >= filtros.PesoMinimo);
-            //if (filtros.RepeticionesMinimas.HasValue)
-            //    query = query.Where(r => r.Repeticiones >= filtros.RepeticionesMinimas);
+
             if (filtros.Desde.HasValue)
                 query = query.Where(r => r.FechaRegistro.Date >= filtros.Desde);
+
             if (filtros.Hasta.HasValue)
                 query = query.Where(r => r.FechaRegistro.Date <= filtros.Hasta);
 
-            query.Include(r => r.IdSesionRealizada);
-
-            bool esDescendente = filtros.Orden?.ToLower() == "desc";
-
-            switch (filtros.OrdenarPor?.ToLower())
-            {
-                case "Peso":
-                    query = esDescendente ? query.OrderByDescending(r => r.PesoMax) : query.OrderBy(r => r.PesoMax);
-                    break;
-                case "Repeticiones":
-                    query = esDescendente ? query.OrderByDescending(r => r.Repeticiones) : query.OrderBy(r => r.Repeticiones);
-                    break;
-                default:
-                    query = esDescendente ? query.OrderByDescending(r => r.FechaRegistro) : query.OrderBy(r => r.FechaRegistro);
-                    break;
-            }
+            query.Include(r => r.SesionRealizada);
 
             return await query.ToListAsync();
         }

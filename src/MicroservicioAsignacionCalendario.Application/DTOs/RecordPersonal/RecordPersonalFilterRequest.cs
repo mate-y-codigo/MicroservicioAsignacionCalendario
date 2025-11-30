@@ -14,9 +14,5 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.RecordPersonal
         public string? NombreGrupoMuscular { get; set; }
         public DateTime? Desde { get; set; }
         public DateTime? Hasta{ get; set; }
-        public string? OrdenarPor { get; set; } = "FechaRegistro";
-        public string? Orden { get; set; } = "desc";
-        public int Pagina { get; set; } = 1;
-        public int CantidadPorPagina { get; set; } = 25;
     }
 }

@@ -68,10 +68,6 @@ namespace MicroservicioAsignacionCalendario.Application.Services
 
         public async Task<List<RecordPersonalResponse>> ObtenerRecordsPersonalesAsync(RecordPersonalFilterRequest filtros)
         {
-            //var usuario = await _usuariosClient.ObtenerUsuario(filtros.IdAlumno);
-            //if (usuario == null)
-            //    throw new NotFoundException($"El usuario con Id {filtros.IdAlumno} no existe.");
-
             if (filtros.IdEjercicio.HasValue)
             {
                 var ejercicio = await _planEntrenamientoClient.ObtenerEjercicio(filtros.IdEjercicio.Value);
