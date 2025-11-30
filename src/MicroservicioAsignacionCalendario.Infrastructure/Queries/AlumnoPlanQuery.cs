@@ -22,6 +22,8 @@ namespace MicroservicioAsignacionCalendario.Infrastructure.Queries
         public async Task<AlumnoPlan> ObtenerAlumnoPlanPorId(Guid id)
         {
             return await _context.AlumnoPlan
+                .Include(ap => ap.SesionesRealizadas)
+                .ThenInclude(sr => sr.EjerciciosRegistrados)
                 .FirstOrDefaultAsync(ap => ap.Id == id);
         }
 

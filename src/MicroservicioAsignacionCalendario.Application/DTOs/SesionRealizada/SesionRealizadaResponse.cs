@@ -14,6 +14,7 @@ namespace MicroservicioAsignacionCalendario.Application.DTOs.SesionRealizada
         public Guid Id { get; set; }
         public Guid IdSesionEntrenamiento { get; set; }
         public Guid IdAlumnoPlan { get; set; }
+        public Guid IdAlumno { get; set; }
 
         // Snapshots: Sesion de entrenamiento
         public string NombreSesion { get; set; }

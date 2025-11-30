@@ -22,12 +22,17 @@ namespace Infrastructure.Queries
 
         public async Task<SesionRealizada> ObtenerSesionRealizadaPorId(Guid id)
         {
-            return await _context.SesionRealizada.FirstOrDefaultAsync(sr => sr.Id == id);
+            return await _context.SesionRealizada
+                .Include(sr => sr.EjerciciosRegistrados)
+                .Include(sr => sr.AlumnoPlan)
+                .FirstOrDefaultAsync(sr => sr.Id == id);
         }
 
         public async Task<List<SesionRealizada>> ObtenerSesionesCompletadas(Guid alumnoPlanId)
         {
             return await _context.SesionRealizada
+                .Include(sr => sr.EjerciciosRegistrados)
+                .Include(sr => sr.AlumnoPlan)
                 .Where(sr => sr.IdAlumnoPlan == alumnoPlanId && sr.Estado == EstadoSesion.Completado)
                 .OrderBy(sr => sr.OrdenSesion)
                 .ToListAsync();

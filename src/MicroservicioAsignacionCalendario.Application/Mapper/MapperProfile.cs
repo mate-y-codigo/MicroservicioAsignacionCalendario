@@ -36,8 +36,9 @@ namespace MicroservicioAsignacionCalendario.Application.Mapper
                 .ForMember(dest => dest.NombreSesion, opt => opt.Ignore())
                 .ForMember(dest => dest.OrdenSesion, opt => opt.Ignore())
                 .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => EstadoSesion.Completado));
-            CreateMap<SesionRealizada, SesionRealizadaResponse>();
-            
+            CreateMap<SesionRealizada, SesionRealizadaResponse>()
+                .ForMember(dest => dest.IdAlumno, opt => opt.MapFrom(src => src.AlumnoPlan.IdAlumno));
+
             // EjercicioRegistro
             CreateMap<EjercicioRegistroRequest, EjercicioRegistro>()
                 .ForMember(dest => dest.IdEjercicioSesion, opt => opt.Ignore())
