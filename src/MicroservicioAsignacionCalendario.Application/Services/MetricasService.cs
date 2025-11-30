@@ -1,6 +1,7 @@
 using System.Globalization;
 using MicroservicioAsignacionCalendario.Application.DTOs.metricas;
 using MicroservicioAsignacionCalendario.Application.Interfaces.Query;
+using MicroservicioAsignacionCalendario.Domain.Entities;
 
 
 
@@ -25,7 +26,7 @@ namespace MicroservicioAsignacionCalendario.Application.Services
             Guid idEntrenador, DateTime desde, DateTime hasta)
         {
             // ============================
-            // 🔵 1. Obtener datos reales
+            //  1. Obtener datos reales
             // ============================
             var planes = await _metricsQuery.GetPlanesDelEntrenadorAsync(idEntrenador);
             var sesiones = await _metricsQuery.GetSesionesRealizadasAsync(idEntrenador, desde, hasta);
@@ -34,17 +35,17 @@ namespace MicroservicioAsignacionCalendario.Application.Services
             var records = await _metricsQuery.GetRecordsPersonalesAsync(idEntrenador, desde, hasta);
 
             // ============================
-            // 🔵 2. Cumplimiento global
+            //  2. Cumplimiento global
             // ============================
             var prog = ejercicios.Count;
             var comp = ejercicios.Count(e => e.Series >= e.SeriesObjetivo);
             double cumplimientoGlobal = prog == 0 ? 0 : (double)comp / prog * 100;
 
             // ============================
-            // 🔵 3. Carga semanal (kg totales)
+            //  3. Carga semanal (kg totales)
             // ============================
             var loadData = ejercicios
-                .GroupBy(e => ISOWeek.GetWeekOfYear(e.FechaRealizacion))
+                .GroupBy(e => GetSemanaRelativa(e.FechaRealizacion, desde))
                 .Select(g => new LoadDataDto
                 {
                     Week = $"Sem {g.Key}",
@@ -53,12 +54,12 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 .ToList();
 
             // ============================
-            // 🔵 4. Fuerza (1RM promedio)
+            //  4. Fuerza (1RM promedio)
             // ============================
             var strengthData = ejercicios
                 .Select(e => new
                 {
-                    week = ISOWeek.GetWeekOfYear(e.FechaRealizacion),
+                    week = GetSemanaRelativa(e.FechaRealizacion, desde),
                     rm = (double)(e.Peso * (1m + 0.0333m * e.Repeticiones))
                 })
                 .GroupBy(g => g.week)
@@ -69,40 +70,94 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 })
                 .ToList();
 
-            // ============================
-            // 🔵 5. Compliance History
-            // ============================
-            var complianceHistory = ejercicios
-                .GroupBy(e => ISOWeek.GetWeekOfYear(e.FechaRealizacion))
+
+            // 5. Compliance History
+
+            var complianceHistory = eventos
+                .GroupBy(e => GetSemanaRelativa(e.FechaProgramada, desde))
                 .Select(g =>
                 {
-                    var total = g.Count();
-                    var completados = g.Count(x => x.Series >= x.SeriesObjetivo);
+                    int semana = g.Key;
+                    var sesionesProgramadas = g.ToList();
+
+                    // Sesiones realizadas correspondientes
+                    var sesionesRealizadasSemana = sesiones
+                        .Where(s => sesionesProgramadas.Any(ev =>
+                            ev.IdAlumnoPlan == s.IdAlumnoPlan &&
+                            ev.IdSesionEntrenamiento == s.IdSesionEntrenamiento))
+                        .ToList();
+
+                    int totalProgramadas = sesionesProgramadas.Count;
+
+                    int totalCumplidas = sesionesProgramadas.Count(ev =>
+                        SesionCumplida(ev, sesionesRealizadasSemana, ejercicios));
 
                     return new ComplianceHistoryDto
                     {
-                        Date = $"Sem {g.Key}",
-                        Compliance = total == 0 ? 0 : (double)completados / total * 100
+                        Date = $"Sem {semana}",
+                        Compliance = totalProgramadas == 0
+                            ? 0
+                            : (double)totalCumplidas / totalProgramadas * 100
+                    };
+                })
+                .OrderBy(x => x.Date)
+                .ToList();
+
+
+
+
+
+            //  6. Weekly Compliance (L-M-X-J-V-S-D)
+            DateTime inicioSemana = desde.Date;
+            DateTime finSemana = inicioSemana.AddDays(6); // siempre 7 días exactos
+
+            var eventosSemana = eventos.Where(e => e.FechaProgramada.Date >= inicioSemana &&
+                        e.FechaProgramada.Date <= finSemana).ToList();
+
+            var sesionesSemana = sesiones.Where(s => s.FechaRealizacion.HasValue &&
+                            s.FechaRealizacion.Value.Date >= inicioSemana &&
+                            s.FechaRealizacion.Value.Date <= finSemana).ToList();
+
+
+            var weeklyCompliance = Enumerable.Range(0, 7)
+                .Select(offset =>
+                {
+                    DateTime dia = inicioSemana.AddDays(offset);
+                    DayOfWeek dow = dia.DayOfWeek;
+                    string diaLetras = GetDiaSemana(dow);
+
+                    // Programadas ese día
+                    var programadas = eventosSemana
+                        .Where(e => e.FechaProgramada.Date == dia.Date)
+                        .ToList();
+
+                    // Realizadas ese día (solo por fecha)
+                    var realizadas = sesionesSemana
+                        .Where(s => s.FechaRealizacion.Value.Date == dia.Date)
+                        .ToList();
+
+                    int totalProgramadas = programadas.Count;
+
+                    int totalCumplidas = programadas.Count(ev =>
+                        SesionCumplida(ev, realizadas, ejercicios)
+                    );
+
+                    return new WeeklyComplianceDto
+                    {
+                        Day = diaLetras,
+                        Value = totalProgramadas == 0
+                            ? 0
+                            : (double)totalCumplidas / totalProgramadas * 100
                     };
                 })
                 .ToList();
 
-            // ============================
-            // 🔵 6. Weekly Compliance (L-M-X-J-V-S-D)
-            // ============================
-            var weeklyCompliance = sesiones
-                .Where(s => s.FechaRealizacion != null)
-                .GroupBy(s => s.FechaRealizacion!.Value.DayOfWeek)
-                .Select(g => new WeeklyComplianceDto
-                {
-                    Day = GetDiaSemana(g.Key),
-                    Value = g.Count()
-                })
-                .ToList();
 
-            // ============================
-            // 🔵 7. Session Gap (días entre sesiones)
-            // ============================
+
+
+
+            //  7. Session Gap (días entre sesiones)
+
             var orderedSessions = sesiones
                 .Where(s => s.FechaRealizacion != null)
                 .OrderBy(s => s.FechaRealizacion)
@@ -117,7 +172,7 @@ namespace MicroservicioAsignacionCalendario.Application.Services
 
                 sessionGapData.Add(new SessionGapDataDto
                 {
-                    Week = $"Sem {ISOWeek.GetWeekOfYear(curr)}",
+                    Week = $"Sem {GetSemanaRelativa(curr, desde)}",
                     Days = (curr - prev).TotalDays
                 });
             }
@@ -136,47 +191,45 @@ namespace MicroservicioAsignacionCalendario.Application.Services
 
 
             //  Pequeños gráficos arriba
-            // =======================================
+
             // PERIODOS
-            // =======================================
+
             var prevDesde = desde.AddMonths(-3);
             var prevHasta = desde;
 
-            // =======================================
+
             // DATOS: ACTUAL
-            // =======================================
+
             var ejerciciosActual = ejercicios;
             var sesionesActual = sesiones;
 
-            // =======================================
+
             // DATOS: TRIMESTRE ANTERIOR
-            // =======================================
+
             var ejerciciosPrev = await _metricsQuery.GetEjerciciosRegistradosAsync(idEntrenador, prevDesde, prevHasta);
             var sesionesPrev = await _metricsQuery.GetSesionesRealizadasAsync(idEntrenador, prevDesde, prevHasta);
+            var eventosPrev = await _metricsQuery.GetEventosProgramadosAsync(idEntrenador, prevDesde, prevHasta);
 
-            // =======================================
             // 1) CUMPLIMIENTO GLOBAL
-            // =======================================
+
 
             // actual
-            var totalAct = ejerciciosActual.Count;
-            var compAct = ejerciciosActual.Count(e => e.Series >= e.SeriesObjetivo);
-            double cumplimientoAct = totalAct == 0 ? 0 : (double)compAct / totalAct * 100;
+            int totalProgramadasAct = eventos.Count;
+            int totalCumplidasAct = eventos.Count(ev => SesionCumplida(ev, sesiones, ejerciciosActual));
+            double cumplimientoAct = totalProgramadasAct == 0 ? 0 : (double)totalCumplidasAct / totalProgramadasAct * 100;
 
             // anterior
-            var totalPrev = ejerciciosPrev.Count;
-            var compPrev = ejerciciosPrev.Count(e => e.Series >= e.SeriesObjetivo);
-            double cumplimientoPrev = totalPrev == 0 ? 0 : (double)compPrev / totalPrev * 100;
+            int totalProgramadasPrev = eventosPrev.Count;
+            int totalCumplidasPrev = eventosPrev.Count(ev => SesionCumplida(ev, sesionesPrev, ejerciciosPrev));
+
+            double cumplimientoPrev = totalProgramadasPrev == 0 ? 0 : (double)totalCumplidasPrev / totalProgramadasPrev * 100;
+
 
             // delta
-            double deltaCumplimiento = cumplimientoPrev == 0
-                ? cumplimientoAct
-                : ((cumplimientoAct - cumplimientoPrev) / Math.Abs(cumplimientoPrev)) * 100;
+            double deltaCumplimiento = cumplimientoPrev == 0 ? cumplimientoAct : ((cumplimientoAct - cumplimientoPrev) / Math.Abs(cumplimientoPrev)) * 100;
 
-            // =======================================
+
             // 2) CARGA TOTAL SEMANAL
-            // =======================================
-
             // actual
             double cargaActual = ejerciciosActual.Sum(e => (double)e.Peso * e.Series * e.Repeticiones);
 
@@ -188,9 +241,9 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 ? cargaActual
                 : ((cargaActual - cargaPrev) / Math.Abs(cargaPrev)) * 100;
 
-            // =======================================
+
             // 3) PROGRESO FUERZA (1 RM PROMEDIO)
-            // =======================================
+
 
             // actual
             double fuerzaActual = ejerciciosActual
@@ -236,11 +289,6 @@ namespace MicroservicioAsignacionCalendario.Application.Services
             };
 
 
-
-            // ============================
-            // 🔵 10. RETURN FINAL
-            // ============================
-
             return new MetricaResponseDto
             {
                 Grafiquitos = grafiquitos,
@@ -253,8 +301,16 @@ namespace MicroservicioAsignacionCalendario.Application.Services
             };
         }
 
+        private int GetSemanaRelativa(DateTime fecha, DateTime desde)
+        {
+            var dias = (fecha.Date - desde.Date).TotalDays;
+            int semana = (int)(dias / 7); // floor automático
+            return semana + 1; // Semana 1, 2, 3...
+        }
 
-        // 🔧 UTILIDAD: convertir DayOfWeek → L-M-X-J-V-S-D
+
+
+        //  convertir DayOfWeek → L-M-X-J-V-S-D
 
         private string GetDiaSemana(DayOfWeek day)
         {
@@ -270,5 +326,34 @@ namespace MicroservicioAsignacionCalendario.Application.Services
                 _ => "?"
             };
         }
+
+        private bool SesionCumplida(
+            EventoCalendario evento,
+            List<SesionRealizada> sesionesRealizadas,
+            List<EjercicioRegistro> ejercicios)
+        {
+            // Buscar la sesión realizada correspondiente por AlumnoPlan + SesionEntrenamiento
+            var sesReal = sesionesRealizadas.FirstOrDefault(s =>
+                s.IdAlumnoPlan == evento.IdAlumnoPlan &&
+                s.IdSesionEntrenamiento == evento.IdSesionEntrenamiento);
+
+            if (sesReal == null)
+                return false;
+
+            // Obtener ejercicios registrados en esa sesión
+            var ej = ejercicios
+                .Where(x => x.IdSesionRealizada == sesReal.Id)
+                .ToList();
+
+            if (!ej.Any())
+                return false;
+
+            // Cumplimiento por ejercicio
+            return ej.All(x =>
+                x.Series >= x.SeriesObjetivo &&
+                x.Repeticiones >= x.RepeticionesObjetivo
+            );
+        }
     }
 }
+
