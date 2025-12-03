@@ -52,8 +52,8 @@ namespace Application.Services
             if (plan == null)
                 throw new BadRequestException("El plan de entrenamiento no existe.");
 
-            if (req.FechaInicio > req.FechaFin || req.FechaInicio.Date < DateTime.Today)
-                throw new BadRequestException("Rango de fechas inválido. La fecha de inicio no puede ser en el pasado.");
+            //if (req.FechaInicio > req.FechaFin || req.FechaInicio.Date < DateTime.Today)
+            //    throw new BadRequestException("Rango de fechas inválido. La fecha de inicio no puede ser en el pasado.");
 
             var primerSesionEntrenamiento = plan.SesionesEntrenamiento
                 .FirstOrDefault(s => s.Orden == 1);
